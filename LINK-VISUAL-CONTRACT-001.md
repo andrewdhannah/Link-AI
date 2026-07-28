@@ -483,27 +483,81 @@ This is the governing invariant for the entire visual system:
 |------|----------|--------|
 | Solid | Identity inspection, documentation, navigation, low distraction | Owl at opacity ~1.0, standard glow, field visible |
 | Ephemeral | Active workflow, voice interaction, runtime feedback, state visualization | Owl at reduced opacity (~0.55), expanded glow (3.5×), field dominant |
-| Fluid (brain) | Processing state, internal activity visualization | Small ellipse inside head (rx=76, ry=50, cy=168), 0.3 opacity, independent floating drift, turbulence animation |
+| Fluid (brain) | Context formation, information organization, evidence synthesis, workspace reconstruction | Small ellipse inside head (rx=76, ry=50, cy=168), 0.3 opacity, independent floating drift, turbulence animation |
 
-These are three representations of the same identity — not three characters
-and not three skins. Fluid mode renders a brain-like signal element inside
-the Identity geometry.
+### Fluid Brain Restriction
+
+Fluid brain mode is **restricted to specific events**:
+
+| Appropriate Use | Inappropriate Use |
+|----------------|-------------------|
+| Context assembly | Default thinking animation |
+| Ingestion / evidence synthesis | Generic "loading" indicator |
+| Workspace reconstruction | Persistent idle state |
+| Order Emerging transition phase | Decorative effect |
+
+The fluid brain communicates that **structure is being built from information**.
+Using it as a generic AI visualization collapses this meaning.
 
 ---
 
-## 14. Validation
+## 14. Architectural Parallel
 
-A LINK implementation passes validation when:
+LINK follows the same governing principle as the rest of the Librarian platform:
 
-1. All SVG paths match `LINK.svg` coordinates exactly (±0.01 px)
-2. All hex colors match the canonical palette (§3)
-3. Identity transformations preserve the invariant rules (§3)
-4. Presence field does not alter identity recognition (§4)
-5. Context modulation respects the precedence rules (§2, §5)
-6. Allowed transformation bounds are respected (§7)
-7. Runtime interface matches `LinkAvatar.setState()` signature (§11)
-8. No state outside the valid vocabulary (§6) can be rendered
-9. Forbidden transformations (§3, §7) are structurally impossible
-10. State transitions respect the transition mode (animated vs instant) (§8)
-11. Order Emerging has no hardcoded completion — event-driven advancement (§9)
-12. The corner-entrance spatial model is preserved (§10)
+| System | Principle |
+|--------|-----------|
+| Capability Registry | Qualification does not create capability |
+| Compiler | Dependency resolution does not create intent |
+| UI | Presentation does not create state |
+| LINK | Expression does not create meaning |
+
+**State comes from the system. Presentation makes that state legible.**
+
+---
+
+## 15. Visual Contract Validation
+
+A LINK implementation is compliant if the following assertions pass:
+
+### Identity
+
+- [ ] Owl recognition survives all states (viewers identify it as the same character regardless of expression)
+- [ ] Geometry relationships remain intact across all allowed transformations
+- [ ] Forbidden transformations (§3) are structurally impossible
+
+### Presence
+
+- [ ] Runtime states map deterministically to field behavior (same state = same field)
+- [ ] No autonomous state transitions occur (the renderer never advances state without caller input)
+- [ ] State colors match the canonical palette (§4)
+
+### Context
+
+- [ ] Collaboration states affect both expression AND field modulation (§5)
+- [ ] Context never alters identity topology (§2 precedence rules)
+- [ ] Two-state sharing is supported (same Presence, different Context produces different visual output)
+
+### Order Emerging
+
+- [ ] Completion corresponds to external readiness (event-driven, not timer-driven)
+- [ ] Minimum phase duration (400ms) prevents instant flash
+- [ ] Maximum wait for context (3000ms) prevents stale gathering animation
+- [ ] Leaving sequence reverses the appearance order
+
+### State Transitions
+
+- [ ] `transition: "animated"` produces smooth interpolation between states
+- [ ] `transition: "instant"` snaps immediately with no intermediate frames
+- [ ] Both modes resolve to the same final visual state for a given collaboration state
+
+### Invocation
+
+- [ ] LINK enters from bottom-left corner
+- [ ] LINK exits to bottom-left corner
+- [ ] No center-stage emergence (avoids "character walking on stage" feeling)
+
+### Fluid Brain
+
+- [ ] Fluid brain is active only during appropriate events (§13 restriction table)
+- [ ] Fluid brain is not the default thinking/processing animation
