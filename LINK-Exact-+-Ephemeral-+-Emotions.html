@@ -851,8 +851,10 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
     ['left','right'].forEach(s => {
       const eye = document.getElementById(s + 'EyeGroup');
       const pupil = document.getElementById(s + 'PupilGroup');
+      const horn = document.getElementById(s + 'HornGroup');
       if (eye) eye.style.transform = 'scaleY(0.05)';
       if (pupil) pupil.style.transform = 'scaleY(0.05)';
+      if (horn) horn.style.transform = 'translateY(3px)';
       setTimeout(() => {
         // Re-apply current expression instead of resetting to neutral
         applyEmotion();
@@ -863,8 +865,10 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
   function triggerWink(side) {
     const eye = document.getElementById(side + 'EyeGroup');
     const pupil = document.getElementById(side + 'PupilGroup');
+    const horn = document.getElementById(side + 'HornGroup');
     if (eye) eye.style.transform = 'scaleY(0.05)';
     if (pupil) pupil.style.transform = 'scaleY(0.05)';
+    if (horn) horn.style.transform = 'translateY(4px)';
     setTimeout(() => {
       applyEmotion();
     }, 220);
