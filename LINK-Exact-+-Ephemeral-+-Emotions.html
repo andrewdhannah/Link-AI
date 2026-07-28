@@ -172,6 +172,9 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
           <rect width="400" height="400" fill="url(#fluidGrad)" filter="url(#fluidFilter)" opacity="0.55"/>
         </g>
 
+        <!-- LINK root group — wraps owl + fluid so transforms (fly, tilt) move both -->
+        <g id="linkRoot">
+
         <!-- Owl group -->
         <g id="owlGroup" filter="url(#glowSolid)">
           <g id="owlScale">
@@ -204,8 +207,9 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
             <g id="peakGroup">
               <path id="widowsPeak" d="m 120.48791,84.897029 c 86.76112,-18.475549 162.25458,5.27873 162.25458,5.27873 L 199.36165,226.10302 Z" fill="#0b2228" stroke="none"/>
             </g>
-          </g>
-        </g>
+          </g><!-- /owlScale -->
+        </g><!-- /owlGroup -->
+        </g><!-- /linkRoot -->
       </svg>
 
       <div class="canvas-badges">
@@ -400,6 +404,7 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
   const svg = document.getElementById('linkSvg');
   const owlGroup = document.getElementById('owlGroup');
   const owlScale = document.getElementById('owlScale');
+  const linkRoot = document.getElementById('linkRoot');
   const energyField = document.getElementById('energyField');
   const particles = document.getElementById('particles');
   const fluidOverlay = document.getElementById('fluidOverlay');
@@ -484,6 +489,7 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
   // ── Main animation loop ──
   let animTime = 0;
   let fieldAngle = 0;
+  let brainTremorPhase = 0;
 
   function animate(timestamp) {
     animTime = timestamp || 0;
@@ -498,6 +504,23 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
 
     // Fluid turbulence evolution
     tickFluid();
+
+    // Brain thinking tremor — subtle lobe activation when in thinking+fluid mode
+    if (state.mode === 'fluid' && state.fieldState === 'thinking') {
+      brainTremorPhase += 0.3;
+      const tremorX = Math.sin(brainTremorPhase * 3.7) * 0.8;
+      const tremorY = Math.cos(brainTremorPhase * 4.1) * 0.6;
+      fluidOverlay.style.transform = `translate(${tremorX}px, ${tremorY}px)`;
+      // Speed up turbulence for thinking state
+      if (fluidTurb) {
+        const freq = 0.025 + Math.sin(brainTremorPhase * 0.5) * 0.012;
+        fluidTurb.setAttribute('baseFrequency', `${freq} ${freq * 1.4}`);
+      }
+    } else if (state.mode === 'fluid') {
+      // Reset tremor for non-thinking states
+      fluidOverlay.style.transform = '';
+      if (fluidTurb) fluidTurb.setAttribute('baseFrequency', '0.018 0.034');
+    }
 
     requestAnimationFrame(animate);
   }
@@ -584,7 +607,7 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
     owlGroup.style.display = 'none';
     fluidOverlay.setAttribute('display', 'none');
 
-    // Phase 1 (200ms): show field only
+    // Phase 1 (120ms): show field only
     setTimeout(() => {
       owlGroup.style.display = '';
       owlGroup.style.opacity = '0';
@@ -594,36 +617,35 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
       document.getElementById('face').style.opacity = '0';
       document.getElementById('chin').style.opacity = '0';
 
-      // Phase 2 (500ms): eyes appear
+      // Phase 2 (350ms): eyes appear
       setTimeout(() => {
         ['leftEyeGroup','rightEyeGroup','leftPupilGroup','rightPupilGroup'].forEach(id => {
           const el = document.getElementById(id);
-          if (el) { el.style.transition = 'opacity .6s ease, transform .12s ease'; el.style.opacity = '1'; }
+          if (el) { el.style.transition = 'opacity .4s ease'; el.style.opacity = '1'; }
         });
 
         // Blink after eyes appear
         setTimeout(() => {
           triggerBlink();
 
-          // Phase 3 (600ms after blink): horns fade in
+          // Phase 3 (400ms after blink): horns fade in
           setTimeout(() => {
             ['leftHornGroup','rightHornGroup'].forEach(id => {
               const el = document.getElementById(id);
-              if (el) { el.style.transition = 'opacity .7s ease'; el.style.opacity = '1'; }
+              if (el) { el.style.transition = 'opacity .5s ease'; el.style.opacity = '1'; }
             });
 
-            // Phase 4 (900ms): face, cheeks, chin, peak fade in
+            // Phase 4 (600ms): face, cheeks, chin, peak fade in
             setTimeout(() => {
               [document.getElementById('face'), document.getElementById('chin'),
                leftCheekGroup, rightCheekGroup, peakGroup].forEach(el => {
-                if (el) { el.style.transition = 'opacity .9s ease'; el.style.opacity = '1'; }
+                if (el) { el.style.transition = 'opacity .6s ease'; el.style.opacity = '1'; }
               });
-              owlGroup.style.transition = 'opacity 1s ease';
+              owlGroup.style.transition = 'opacity .7s ease';
               owlGroup.style.opacity = state.version === 'ephemeral' ? 0.55 * state.transparency : state.transparency;
 
-              // Phase 5 (1.2s later): settled → auto-switch to fluid
+              // Phase 5 (800ms): settled → auto-switch to fluid
               setTimeout(() => {
-                // Clean all inline opacities
                 [leftEyeGroup, rightEyeGroup, leftPupilGroup, rightPupilGroup,
                  leftHornGroup, rightHornGroup, leftCheekGroup, rightCheekGroup,
                  peakGroup, document.getElementById('face'), document.getElementById('chin')].forEach(el => {
@@ -641,12 +663,12 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
                 fluidOverlay.removeAttribute('display');
                 applyFieldColor();
                 modeDesc.textContent = 'Organic fluid distortion inside the owl head — turbulence evolves continuously, color shifts with field state. LINK stays in default colors.';
-              }, 1200);
-            }, 900);
-          }, 600);
-        }, 700);
-      }, 500);
-    }, 200);
+              }, 800);
+            }, 600);
+          }, 400);
+        }, 450);
+      }, 350);
+    }, 120);
   }
 
   // ── Order Leaving (reverse sequence) ──
@@ -655,10 +677,10 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
     orderAnimActive = true;
     fluidOverlay.setAttribute('display', 'none');
 
-    // Phase 1: face fades
+    // Phase 1: face fades (400ms)
     [document.getElementById('face'), document.getElementById('chin'),
      leftCheekGroup, rightCheekGroup].forEach(el => {
-      if (el) { el.style.transition = 'opacity .5s ease'; el.style.opacity = '0'; }
+      if (el) { el.style.transition = 'opacity .35s ease'; el.style.opacity = '0'; }
     });
 
     setTimeout(() => {
@@ -666,10 +688,10 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
       triggerBlink();
 
       setTimeout(() => {
-        // Phase 3: horns fade
+        // Phase 3: horns fade (300ms)
         ['leftHornGroup','rightHornGroup','peakGroup'].forEach(id => {
           const el = document.getElementById(id);
-          if (el) { el.style.transition = 'opacity .4s ease'; el.style.opacity = '0'; }
+          if (el) { el.style.transition = 'opacity .25s ease'; el.style.opacity = '0'; }
         });
 
         setTimeout(() => {
@@ -677,14 +699,13 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
           triggerBlink();
 
           setTimeout(() => {
-            // Phase 5: eyes fade
+            // Phase 5: eyes fade (350ms)
             ['leftEyeGroup','rightEyeGroup','leftPupilGroup','rightPupilGroup'].forEach(id => {
               const el = document.getElementById(id);
-              if (el) { el.style.transition = 'opacity .5s ease'; el.style.opacity = '0'; }
+              if (el) { el.style.transition = 'opacity .35s ease'; el.style.opacity = '0'; }
             });
 
             setTimeout(() => {
-              // Clean up — show field only state
               [leftEyeGroup, rightEyeGroup, leftPupilGroup, rightPupilGroup,
                leftHornGroup, rightHornGroup, leftCheekGroup, rightCheekGroup,
                peakGroup, document.getElementById('face'), document.getElementById('chin')].forEach(el => {
@@ -702,11 +723,11 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
               owlGroup.style.display = '';
               owlGroup.style.opacity = state.version === 'ephemeral' ? 0.55 * state.transparency : state.transparency;
               modeDesc.textContent = 'Crisp owl core + 3 field rings breathing outside, cyan glow, particles orbiting.';
-            }, 500);
-          }, 300);
-        }, 500);
-      }, 300);
-    }, 600);
+            }, 350);
+          }, 200);
+        }, 350);
+      }, 200);
+    }, 400);
   }
 
   // ── Apply version ──
@@ -738,6 +759,7 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
     [leftEyeGroup, rightEyeGroup, leftPupilGroup, rightPupilGroup,
      leftHornGroup, rightHornGroup, leftCheekGroup, rightCheekGroup,
      peakGroup].forEach(el => { if (el) { el.style.transform = ''; } });
+    linkRoot.style.transform = '';
     owlGroup.style.transform = '';
     document.getElementById('leftPupil').setAttribute('cx', '143.02325');
     document.getElementById('leftPupil').setAttribute('cy', '214.6857');
@@ -771,7 +793,7 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
         peakGroup.style.transform = 'translateY(-4px)';
         break;
       case 'curious':
-        owlGroup.style.transform = 'rotate(7deg)';
+        linkRoot.style.transform = 'rotate(7deg)';
         leftHornGroup.style.transform = 'translateY(-8px)';
         rightHornGroup.style.transform = 'translateY(3px)';
         break;
@@ -788,15 +810,20 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
         peakGroup.style.transform = 'translateY(5px)';
         break;
       case 'complete':
-        // Expansive: horns + peak lift, cheeks widen + raise, chin lifts
+        // Whole-face lift: cheeks come out and up, chin lifts, brows rise, eyes brighten
+        leftCheekGroup.style.transform = 'translate(-10px, -6px) scale(1.18)';
+        rightCheekGroup.style.transform = 'translate(10px, -6px) scale(1.18)';
+        document.getElementById('chin').style.transform = 'translateY(-8px)';
         leftHornGroup.style.transform = 'translateY(-10px)';
         rightHornGroup.style.transform = 'translateY(-10px)';
         peakGroup.style.transform = 'translateY(-6px)';
-        leftCheekGroup.style.transform = 'translate(-6px, -8px) scale(1.12)';
-        rightCheekGroup.style.transform = 'translate(6px, -8px) scale(1.12)';
-        document.getElementById('chin').style.transform = 'translateY(-6px)';
-        leftEyeGroup.style.transform = 'scaleY(0.85)';
-        rightEyeGroup.style.transform = 'scaleY(0.85)';
+        // Eyes brighter: slightly bigger pupils
+        document.getElementById('leftPupil').setAttribute('rx', '26');
+        document.getElementById('rightPupil').setAttribute('rx', '25');
+        document.getElementById('leftPupil').setAttribute('ry', '22');
+        document.getElementById('rightPupil').setAttribute('ry', '23');
+        leftEyeGroup.style.transform = 'scaleY(0.88)';
+        rightEyeGroup.style.transform = 'scaleY(0.88)';
         break;
     }
 
@@ -830,7 +857,7 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
     }, 220);
   }
 
-  // ── Breathing ──
+    // ── Breathing ──
   let breathAnimId = null;
   function startBreathing() {
     stopBreathing();
@@ -851,19 +878,18 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
     if (breathAnimId) { cancelAnimationFrame(breathAnimId); breathAnimId = null; }
   }
 
-  // ── Fly (bottom-left corner) ──
+  // ── Fly (bottom-left corner) — applies to linkRoot so fluid travels with owl ──
   function applyFlyTransform(pct) {
     const f = pct / 100;
-    // Bottom-left entrance: starts at (-300, +280) and moves to (0,0)
     const tx = -300 * f;
     const ty = 280 * f;
     const s = 1 - f * 0.5;
-    owlScale.style.transform = `translate(${tx}px, ${ty}px) scale(${Math.max(s, 0.5)})`;
+    linkRoot.style.transform = `translate(${tx}px, ${ty}px) scale(${Math.max(s, 0.5)})`;
   }
 
   function flyTo(targetPct) {
     const start = state.flyPercent;
-    const dur = 600;
+    const dur = 400; // faster
     const t0 = performance.now();
     function tick(now) {
       const t = Math.min((now - t0) / dur, 1);
@@ -1008,7 +1034,7 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
   document.querySelectorAll('[data-emotion]').forEach(b => {
     b.addEventListener('click', function() {
       state.emotion = this.dataset.emotion;
-      owlGroup.style.transform = '';
+      linkRoot.style.transform = '';
       applyEmotion();
     });
   });
