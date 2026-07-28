@@ -994,12 +994,12 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
     fo.setAttribute('display', 'none');
     const brain = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
     brain.setAttribute('cx', '207.8');
-    brain.setAttribute('cy', '207');
-    brain.setAttribute('rx', '96');   // ~55% of face rx=174
-    brain.setAttribute('ry', '66');   // ~55% of face ry=120
+    brain.setAttribute('cy', '168');   // above the eyes (eyes at cy≈206)
+    brain.setAttribute('rx', '76');    // ~44% of face rx=174
+    brain.setAttribute('ry', '50');    // ~42% of face ry=120
     brain.setAttribute('fill', 'url(#fluidGrad)');
     brain.setAttribute('filter', 'url(#fluidFilter)');
-    brain.setAttribute('opacity', '0.6');
+    brain.setAttribute('opacity', '0.3');
     fo.appendChild(brain);
     linkRoot.insertBefore(fo, linkRoot.firstChild);
     fluidOverlay = fo;
