@@ -805,20 +805,20 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
         peakGroup.style.transform = 'translateY(5px)';
         break;
       case 'complete':
-        // Whole-face lift: cheeks come out and up, chin lifts, brows rise, eyes brighten
-        leftCheekGroup.style.transform = 'translate(-10px, -6px) scale(1.18)';
-        rightCheekGroup.style.transform = 'translate(10px, -6px) scale(1.18)';
-        document.getElementById('chin').style.transform = 'translateY(-8px)';
-        leftHornGroup.style.transform = 'translateY(-10px)';
-        rightHornGroup.style.transform = 'translateY(-10px)';
-        peakGroup.style.transform = 'translateY(-6px)';
-        // Eyes brighter: slightly bigger pupils
-        document.getElementById('leftPupil').setAttribute('rx', '26');
-        document.getElementById('rightPupil').setAttribute('rx', '25');
-        document.getElementById('leftPupil').setAttribute('ry', '22');
-        document.getElementById('rightPupil').setAttribute('ry', '23');
-        leftEyeGroup.style.transform = 'scaleY(0.88)';
-        rightEyeGroup.style.transform = 'scaleY(0.88)';
+        // Whole-face lift: cheeks lift up and out, chin rises, brows pushed up, eyes brighten
+        leftCheekGroup.style.transform = 'translate(-6px, -14px)';
+        rightCheekGroup.style.transform = 'translate(6px, -14px)';
+        document.getElementById('chin').style.transform = 'translateY(-12px)';
+        leftHornGroup.style.transform = 'translateY(-8px)';
+        rightHornGroup.style.transform = 'translateY(-8px)';
+        peakGroup.style.transform = 'translateY(-5px)';
+        // Eyes brighter: larger pupils, soft squint
+        document.getElementById('leftPupil').setAttribute('rx', '28');
+        document.getElementById('rightPupil').setAttribute('rx', '27');
+        document.getElementById('leftPupil').setAttribute('ry', '24');
+        document.getElementById('rightPupil').setAttribute('ry', '25');
+        leftEyeGroup.style.transform = 'scaleY(0.92)';
+        rightEyeGroup.style.transform = 'scaleY(0.92)';
         break;
     }
 
