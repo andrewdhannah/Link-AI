@@ -989,9 +989,23 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
     canvasStats.textContent = `peak ABOVE eyes ✓ | glow ${state.glowIntensity.toFixed(1)} | ${state.emotion}`;
     flyPercent.textContent = `${state.flyPercent}% fly`;
   }
+  // ── Reveal LINK (used by direct mode clicks when starting from dormant state) ──
+  function revealLink() {
+    energyField.style.transition = 'opacity .4s ease';
+    energyField.style.opacity = '1';
+    owlGroup.style.display = '';
+    linkRoot.style.transition = '';
+    linkRoot.style.opacity = '1';
+  }
 
   // ── Init ──
   function init() {
+    // Start from nothing — energy field dormant
+    energyField.style.transition = 'opacity .6s ease';
+    energyField.style.opacity = '0.12';
+    owlGroup.style.display = 'none';
+    linkRoot.style.opacity = '0';
+
     // Create fluid brain — scaled-down face ellipse with its own floating movement
     const fo = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     fo.setAttribute('id', 'fluidOverlay');
@@ -1033,6 +1047,7 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
   document.querySelectorAll('[data-mode]').forEach(b => {
     b.addEventListener('click', function() {
       if (orderAnimActive) { clearTimeout(orderAnimTimer); orderAnimTimer = null; orderAnimActive = false; }
+      revealLink();
       // Restore all visibilities
       [leftEyeGroup, rightEyeGroup, leftPupilGroup, rightPupilGroup,
        leftHornGroup, rightHornGroup, leftCheekGroup, rightCheekGroup,
@@ -1135,27 +1150,105 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
 
   document.querySelector('[data-action="appear"]').addEventListener('click', function() {
     if (orderAnimActive) { clearTimeout(orderAnimTimer); orderAnimTimer = null; orderAnimActive = false; }
-    // Reset all inline styles first
+    stopBreathing();
+    clearTimeout(autoBlinkTimer);
+
+    // Phase 0: hide everything
+    energyField.style.transition = 'opacity .6s ease';
+    energyField.style.opacity = '0';
+    linkRoot.style.transform = '';
+    linkRoot.style.opacity = '0';
+    owlGroup.style.display = 'none';
+    fluidOverlay.setAttribute('display', 'none');
+
     [leftEyeGroup, rightEyeGroup, leftPupilGroup, rightPupilGroup,
      leftHornGroup, rightHornGroup, leftCheekGroup, rightCheekGroup,
      peakGroup, document.getElementById('face'), document.getElementById('chin')].forEach(el => {
       if (el) { el.style.transition = ''; el.style.opacity = ''; el.style.transform = ''; }
     });
-    owlGroup.style.display = '';
-    owlGroup.style.transition = '';
-    energyField.style.display = '';
-    energyField.style.filter = 'none';
-    fluidOverlay.setAttribute('display', 'none');
-    state.mode = 'order';
-    document.querySelectorAll('[data-mode]').forEach(b => {
-      b.classList.toggle('btn-active', b.dataset.mode === 'order');
-    });
-    startOrderEmerging();
+
+    // Phase 1: energy field fades in (600ms)
+    setTimeout(() => {
+      energyField.style.opacity = '1';
+
+      // Phase 2: fly in from bottom-left (after field fade, 700ms)
+      setTimeout(() => {
+        linkRoot.style.transition = 'transform .5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity .4s ease';
+        linkRoot.style.transform = 'translate(0px, 0px) scale(1)';
+        linkRoot.style.opacity = '1';
+
+        // Phase 3: order emerging (after fly in, 600ms)
+        setTimeout(() => {
+          linkRoot.style.transition = '';
+          state.mode = 'order';
+          document.querySelectorAll('[data-mode]').forEach(b => {
+            b.classList.toggle('btn-active', b.dataset.mode === 'order');
+          });
+          startOrderEmerging();
+        }, 600);
+      }, 700);
+    }, 100);
   });
 
   document.querySelector('[data-action="leave"]').addEventListener('click', function() {
     if (orderAnimActive) { clearTimeout(orderAnimTimer); orderAnimTimer = null; orderAnimActive = false; }
-    startOrderLeaving();
+    stopBreathing();
+    clearTimeout(autoBlinkTimer);
+
+    // Phase 1: order leaving (reverse emerging)
+    fluidOverlay.setAttribute('display', 'none');
+
+    [document.getElementById('face'), document.getElementById('chin'),
+     leftCheekGroup, rightCheekGroup].forEach(el => {
+      if (el) { el.style.transition = 'opacity .3s ease'; el.style.opacity = '0'; }
+    });
+
+    setTimeout(() => {
+      triggerBlink();
+      setTimeout(() => {
+        ['leftHornGroup','rightHornGroup','peakGroup'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) { el.style.transition = 'opacity .25s ease'; el.style.opacity = '0'; }
+        });
+        setTimeout(() => {
+          triggerBlink();
+          setTimeout(() => {
+            ['leftEyeGroup','rightEyeGroup','leftPupilGroup','rightPupilGroup'].forEach(id => {
+              const el = document.getElementById(id);
+              if (el) { el.style.transition = 'opacity .3s ease'; el.style.opacity = '0'; }
+            });
+
+            // Phase 2: fly out (after face faded)
+            setTimeout(() => {
+              [leftEyeGroup, rightEyeGroup, leftPupilGroup, rightPupilGroup,
+               leftHornGroup, rightHornGroup, leftCheekGroup, rightCheekGroup,
+               peakGroup, document.getElementById('face'), document.getElementById('chin')].forEach(el => {
+                if (el) { el.style.transition = ''; el.style.opacity = ''; }
+              });
+
+              linkRoot.style.transition = 'transform .4s ease, opacity .3s ease';
+              linkRoot.style.transform = 'translate(-300px, 280px) scale(0.5)';
+              linkRoot.style.opacity = '0';
+
+              // Phase 3: energy field fades out (after fly)
+              setTimeout(() => {
+                energyField.style.transition = 'opacity .5s ease';
+                energyField.style.opacity = '0';
+                owlGroup.style.display = 'none';
+                owlGroup.style.transition = '';
+                orderAnimActive = false;
+
+                state.mode = 'field';
+                document.querySelectorAll('[data-mode]').forEach(b => {
+                  b.classList.toggle('btn-active', b.dataset.mode === 'field');
+                });
+                modeDesc.textContent = 'Crisp owl core + 3 field rings breathing outside, cyan glow, particles orbiting.';
+              }, 500);
+            }, 400);
+          }, 200);
+        }, 350);
+      }, 200);
+    }, 400);
   });
 
   document.getElementById('glowCheck').addEventListener('change', function() {
