@@ -16,8 +16,6 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:#1e2935;border-radius:3px}
 ::selection{background:rgba(0,229,255,0.3)}
-
-/* Preview panel */
 .preview{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:1rem;gap:1rem}
 @media(min-width:1024px){.preview{justify-content:center;padding:2rem}}
 .preview-header{width:100%;max-width:560px;display:flex;align-items:center;justify-content:space-between}
@@ -26,34 +24,26 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
 .status-dot{width:8px;height:8px;border-radius:50%;background:#00e5ff;transition:background .35s}
 .status-dot.pulse{animation:pulse 2s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-
-/* Canvas card */
 .canvas-card{position:relative;background:#0e151a;border-radius:20px;border:1px solid rgba(255,255,255,.06);padding:12px;box-shadow:0 0 0 1px rgba(255,255,255,.03),0 20px 80px -20px rgba(0,229,255,.25)}
 @media(min-width:640px){.canvas-card{padding:16px}}
 .canvas-wrap{position:relative;width:360px;height:360px;background:#0a0e12;border-radius:16px;overflow:hidden}
 @media(min-width:640px){.canvas-wrap{width:400px;height:400px}}
 .canvas-wrap svg{display:block;width:100%;height:100%}
-
 .canvas-badges{position:absolute;top:12px;left:12px;display:flex;gap:6px;pointer-events:none}
 .canvas-badge{padding:4px 10px;border-radius:999px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.1);font-size:10px;letter-spacing:.12em;text-transform:uppercase;backdrop-filter:blur(4px)}
 .badge-energy{color:#9cd4ff}
 .badge-mode{color:#a1a1aa}
 .canvas-stats{position:absolute;right:12px;bottom:12px;font-size:10px;color:#71717a;font-family:'JetBrains Mono',monospace;pointer-events:none;text-align:right}
-
 .canvas-footer{display:flex;align-items:center;justify-content:space-between;margin-top:12px;font-size:11px;color:#71717a;font-family:'JetBrains Mono',monospace}
-
-/* SVG animation origins */
 .eye-group{transform-origin:var(--eye-cx) var(--eye-cy);transition:transform .12s ease}
 .pupil-group{transform-origin:var(--pupil-cx) var(--pupil-cy);transition:transform .12s ease}
-
-/* Mobile quick buttons */
+.cheek-group{transition:transform .25s ease}
+.horn-group{transition:transform .25s ease}
 .mobile-actions{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;width:100%;max-width:400px}
 @media(min-width:1024px){.mobile-actions{display:none}}
 .mobile-btn{height:36px;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:#e4e4e7;font-size:11px;font-family:'Inter',sans-serif;cursor:pointer;transition:all .15s}
 .mobile-btn:hover{background:rgba(255,255,255,.1)}
 .mobile-btn.active{background:rgba(0,229,255,.2);border-color:rgba(0,229,255,.3);color:#67e8f9}
-
-/* Controls sidebar */
 .controls{width:100%;border-top:1px solid rgba(255,255,255,.06);background:#0d1317;display:flex;flex-direction:column}
 @media(min-width:1024px){.controls{width:380px;border-top:none;border-left:1px solid rgba(255,255,255,.06)}}
 .controls-header{padding:20px;border-bottom:1px solid rgba(255,255,255,.06)}
@@ -62,60 +52,40 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
 .controls-scroll{flex:1;overflow-y:auto;padding:20px}
 .controls-scroll>section{margin-bottom:28px}
 .controls-scroll>section:last-child{margin-bottom:4px}
-
 .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .section-title{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#a1a1aa;font-weight:500}
 .section-sub{font-size:10px;color:#52525b}
-
-/* Button groups */
 .btn-group{display:flex;gap:8px;flex-wrap:wrap}
 .btn-group-2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .btn-group-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.btn-group-5{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
 .btn-group-6{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-
 .btn{border-radius:999px;padding:8px 14px;font-size:12px;font-family:'Inter',sans-serif;font-weight:500;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#d4d4d8;cursor:pointer;transition:all .15s;text-align:center;white-space:nowrap}
 .btn:hover{background:rgba(255,255,255,.1)}
 .btn-active{background:#fff;color:#09090b;border-color:#fff}
 .btn-sm{padding:6px 10px;font-size:11px}
-.btn-xs{padding:5px 8px;font-size:10px}
-
-/* State color buttons */
 .state-btn{display:flex;align-items:center;gap:6px;height:32px;border-radius:999px;padding:0 12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#a1a1aa;font-size:11px;font-family:'Inter',sans-serif;cursor:pointer;transition:all .15s;white-space:nowrap}
 .state-btn:hover{border-color:rgba(255,255,255,.2)}
 .state-btn.active{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);color:#e4e4e7}
 .state-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-
-/* Emotion buttons */
 .emotion-btn{height:36px;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:#d4d4d8;font-size:11px;font-family:'Inter',sans-serif;cursor:pointer;transition:all .15s}
 .emotion-btn:hover{background:rgba(255,255,255,.1)}
 .emotion-btn.active{background:#22d3ee;color:#09090b;border-color:#22d3ee}
-
-/* Checkbox rows */
 .check-row{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);cursor:pointer;transition:all .15s}
 .check-row:hover{border-color:rgba(255,255,255,.12)}
 .check-row input[type=checkbox]{accent-color:#22d3ee;width:16px;height:16px;cursor:pointer}
 .check-row .check-label{font-size:12px;color:#d4d4d8;flex:1}
 .check-row .check-desc{font-size:10px;color:#52525b}
 .check-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:#22d3ee}
-
-/* Sliders */
 .slider-group{margin-bottom:12px}
 .slider-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
 .slider-label{font-size:11px;color:#a1a1aa}
 .slider-value{font-size:11px;font-family:'JetBrains Mono',monospace;color:#52525b}
-.slider-group input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;background:#1e2935;border-radius:999px;outline:none;transition:background .15s}
+.slider-group input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;background:#1e2935;border-radius:999px;outline:none}
 .slider-group input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#00e5ff;border:2px solid #0a0e12;box-shadow:0 0 8px rgba(0,229,255,.6);cursor:pointer}
 .slider-group input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:#00e5ff;border:2px solid #0a0e12;box-shadow:0 0 8px rgba(0,229,255,.6);cursor:pointer}
-
-/* Effects row */
 .effects-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
-
-/* Small description text */
 .desc{font-size:10px;color:#52525b;line-height:1.5;margin-top:4px}
 .desc-mono{font-size:10px;color:#3f3f46;font-family:'JetBrains Mono',monospace;line-height:1.6;padding-top:12px;border-top:1px solid rgba(255,255,255,.05)}
-
-/* Glow slider special */
 .glow-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
 .glow-row input[type=range]{flex:1}
 .glow-row .slider-value{flex-shrink:0;width:32px;text-align:right}
@@ -125,7 +95,6 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
 <body>
 <div id="app">
 
-<!-- Preview Panel -->
 <div class="preview">
   <div class="preview-header">
     <h1>LINK — Exact + Ephemeral + Emotions</h1>
@@ -139,17 +108,12 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
     <div class="canvas-wrap">
       <svg id="linkSvg" viewBox="0 0 400 400" width="400" height="400">
         <defs>
-          <!-- Glow filter for solid mode -->
           <filter id="glowSolid" x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur id="glowSolidBlur" in="SourceAlpha" stdDeviation="3.52" result="blur"/>
             <feFlood id="glowSolidFlood" flood-color="#00E5FF" flood-opacity="0.56" result="color"/>
             <feComposite in="color" in2="blur" operator="in" result="glow"/>
-            <feMerge>
-              <feMergeNode in="glow"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
+            <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
           </filter>
-          <!-- Ephemeral glow filter -->
           <filter id="glowEphemeral" x="-60%" y="-60%" width="220%" height="220%">
             <feGaussianBlur in="SourceAlpha" stdDeviation="6.34" result="blur1"/>
             <feGaussianBlur id="glowEphInnerBlur" in="SourceAlpha" stdDeviation="3.52" result="blur2"/>
@@ -157,19 +121,13 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
             <feComposite in="cyan" in2="blur1" operator="in" result="outerGlow"/>
             <feFlood id="glowEphFlood2" flood-color="#00E5FF" flood-opacity="0.56" result="stateGlow"/>
             <feComposite in="stateGlow" in2="blur2" operator="in" result="innerGlow"/>
-            <feMerge>
-              <feMergeNode in="outerGlow"/>
-              <feMergeNode in="innerGlow"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
+            <feMerge><feMergeNode in="outerGlow"/><feMergeNode in="innerGlow"/><feMergeNode in="SourceGraphic"/></feMerge>
           </filter>
-          <!-- Fluid displacement -->
           <filter id="fluidFilter" x="-20%" y="-20%" width="140%" height="140%">
-            <feTurbulence baseFrequency="0.018 0.034" numOctaves="3" seed="0" type="fractalNoise" result="turb"/>
-            <feDisplacementMap in="SourceGraphic" in2="turb" scale="18" xChannelSelector="R" yChannelSelector="G"/>
-            <feGaussianBlur stdDeviation="0.6"/>
+            <feTurbulence id="fluidTurb" baseFrequency="0.018 0.034" numOctaves="3" seed="1" type="fractalNoise" result="turb"/>
+            <feDisplacementMap in="SourceGraphic" in2="turb" scale="22" xChannelSelector="R" yChannelSelector="G"/>
+            <feGaussianBlur stdDeviation="0.8"/>
           </filter>
-          <!-- Gradients -->
           <radialGradient id="fluidGrad" cx="0.5" cy="0.4" r="0.8">
             <stop offset="0%" stop-color="#00E5FF" stop-opacity="0.9"/>
             <stop offset="35%" stop-color="#00E5FF" stop-opacity="0.6"/>
@@ -180,7 +138,6 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
             <stop offset="0%" stop-color="#00E5FF" stop-opacity="0.18"/>
             <stop offset="100%" stop-color="#164450" stop-opacity="0.05"/>
           </linearGradient>
-          <!-- Owl silhouette clip -->
           <clipPath id="owlSilhouette">
             <ellipse cx="207.81244" cy="207.07414" rx="174.08565" ry="120.15359"/>
             <ellipse cx="330.18011" cy="235.67995" rx="58.59193" ry="60.892315"/>
@@ -192,65 +149,52 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
           </clipPath>
         </defs>
 
-        <!-- Background -->
         <rect width="400" height="400" fill="#0A0E12"/>
 
         <!-- Energy field layer -->
-        <g id="energyField" opacity="0.95" stroke="#00E5FF">
-          <!-- Ambient field rings -->
+        <g id="energyField" stroke="#00E5FF">
           <g stroke-width="1" fill="none">
             <ellipse id="ring1" cx="207.8" cy="207" rx="201.58" ry="141.96" stroke-opacity="0.18"/>
             <ellipse id="ring2" cx="207.8" cy="207" rx="239.41" ry="166.89" stroke-opacity="0.14" stroke-dasharray="6 10"/>
             <ellipse id="ring3" cx="207.8" cy="207" rx="291.85" ry="201.8" stroke-opacity="0.1"/>
           </g>
-          <!-- Particles -->
-          <g id="particles" fill="#00E5FF">
-            <circle cx="367.17" cy="126.32" r="2.2" opacity="0.42"/>
-            <circle cx="429.51" cy="234.27" r="1.4" opacity="0.63"/>
-            <circle cx="354.75" cy="354.11" r="2.2" opacity="0.91"/>
-            <circle cx="174.57" cy="344.95" r="1.4" opacity="0.99"/>
-            <circle cx="23.92" cy="299.20" r="2.2" opacity="0.81"/>
-            <circle cx="-43.47" cy="176.32" r="1.4" opacity="0.52"/>
-            <circle cx="95.43" cy="92.58" r="2.2" opacity="0.40"/>
-            <circle cx="246.14" cy="49.34" r="1.4" opacity="0.55"/>
-          </g>
+          <g id="particles" fill="#00E5FF"/>
         </g>
 
-        <!-- Owl group (animated) -->
+        <!-- Fluid overlay (visible only in fluid mode) -->
+        <g id="fluidOverlay" display="none">
+          <rect width="400" height="400" fill="url(#fluidGrad)" filter="url(#fluidFilter)" opacity="0.45"/>
+        </g>
+
+        <!-- Owl group -->
         <g id="owlGroup" filter="url(#glowSolid)">
           <g id="owlScale">
             <ellipse id="face" cx="207.81244" cy="207.07414" rx="174.08565" ry="120.15359" fill="#164450" stroke="none"/>
-            <ellipse id="rightCheek" cx="330.18011" cy="235.67995" rx="58.59193" ry="60.892315" fill="#164450" stroke="none"/>
-            <ellipse id="leftCheek" cx="82.177795" cy="233.71455" rx="58.59193" ry="60.892315" fill="#164450" stroke="none"/>
+            <g id="leftCheekGroup" class="cheek-group">
+              <ellipse id="leftCheek" cx="82.177795" cy="233.71455" rx="58.59193" ry="60.892315" fill="#164450" stroke="none"/>
+            </g>
+            <g id="rightCheekGroup" class="cheek-group">
+              <ellipse id="rightCheek" cx="330.18011" cy="235.67995" rx="58.59193" ry="60.892315" fill="#164450" stroke="none"/>
+            </g>
             <path id="chin" d="m 157.67124,317.44149 c 52.95809,59.80496 48.45102,40.23242 48.45102,40.23242 0,0 -50.70456,44.5819 0,0 50.70457,-44.58188 36.05657,-41.31978 36.05657,-41.31978 z" fill="#164450" stroke="none"/>
-
-            <!-- Left horn -->
-            <g id="leftHornGroup">
+            <g id="leftHornGroup" class="horn-group">
               <path id="leftHorn" d="M 129.50204,84.745849 C 57.388899,33.639798 21.332323,35.814523 21.332323,35.814523 l 4.50707,53.280776 c 0,0 -10.14091,15.223081 15.77475,29.358801 25.915666,14.13571 176.902567,40.23242 163.381357,36.97033 -13.52122,-3.26209 -75.49346,-70.678581 -75.49346,-70.678581 z" fill="#0b2228" stroke="none"/>
             </g>
-            <!-- Right horn -->
-            <g id="rightHornGroup">
+            <g id="rightHornGroup" class="horn-group">
               <path id="rightHorn" d="m 275.41158,83.206889 c 61.75705,-51.106048 92.63558,-48.931323 92.63558,-48.931323 l -3.85983,53.280773 c 0,0 8.68461,15.223081 -13.50935,29.358801 -22.19395,14.13571 -151.49776,40.23242 -139.91832,36.97033 11.57945,-3.26209 64.65192,-70.678581 64.65192,-70.678581 z" fill="#0b2228" stroke="none"/>
             </g>
-
-            <!-- Right eye -->
             <g id="rightEyeGroup" class="eye-group" style="--eye-cx:270.84px;--eye-cy:208.43px">
               <ellipse id="rightEye" cx="270.83963" cy="208.43449" rx="60.84547" ry="59.804955" fill="#53676c" stroke="none"/>
             </g>
-            <!-- Right pupil -->
             <g id="rightPupilGroup" class="pupil-group" style="--pupil-cx:270.7px;--pupil-cy:217.89px">
               <ellipse id="rightPupil" cx="270.70145" cy="217.88528" rx="21.408592" ry="20.116211" fill="#dbe2e3" stroke="none"/>
             </g>
-            <!-- Left eye -->
             <g id="leftEyeGroup" class="eye-group" style="--eye-cx:140.77px;--eye-cy:204.36px">
               <ellipse id="leftEye" cx="140.76973" cy="204.35574" rx="60.84547" ry="59.804955" fill="#53676c" stroke="none"/>
             </g>
-            <!-- Left pupil -->
             <g id="leftPupilGroup" class="pupil-group" style="--pupil-cx:143.02px;--pupil-cy:214.69px">
               <ellipse id="leftPupil" cx="143.02325" cy="214.6857" rx="22.53536" ry="19.028851" fill="#dbe2e3" stroke="none"/>
             </g>
-
-            <!-- Widow's peak (rendered last, above eyes) -->
             <g id="peakGroup">
               <path id="widowsPeak" d="m 120.48791,84.897029 c 86.76112,-18.475549 162.25458,5.27873 162.25458,5.27873 L 199.36165,226.10302 Z" fill="#0b2228" stroke="none"/>
             </g>
@@ -258,7 +202,6 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
         </g>
       </svg>
 
-      <!-- Canvas badges -->
       <div class="canvas-badges">
         <div class="canvas-badge badge-energy" id="badgeEnergy">energy • Idle</div>
         <div class="canvas-badge badge-mode" id="badgeMode">solid</div>
@@ -271,7 +214,6 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
     </div>
   </div>
 
-  <!-- Mobile quick actions -->
   <div class="mobile-actions" id="mobileActions">
     <button class="mobile-btn" data-mobile="blink">Blink</button>
     <button class="mobile-btn" data-mobile="wleft">W-Left</button>
@@ -281,7 +223,6 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
   </div>
 </div>
 
-<!-- Controls Sidebar -->
 <div class="controls">
   <div class="controls-header">
     <div class="label">Controls</div>
@@ -289,7 +230,6 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
   </div>
   <div class="controls-scroll">
 
-    <!-- Version -->
     <section>
       <div class="section-header">
         <span class="section-title">Version</span>
@@ -301,7 +241,6 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
       </div>
     </section>
 
-    <!-- Layer -->
     <section>
       <div class="section-title" style="margin-bottom:10px">Layer</div>
       <label class="check-row">
@@ -314,7 +253,6 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
       </label>
     </section>
 
-    <!-- Modes -->
     <section>
       <div class="section-title" style="margin-bottom:10px">Modes — Shared by both versions</div>
       <div class="btn-group-3">
@@ -325,7 +263,6 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
       <div class="desc" id="modeDesc">Crisp owl core + 3 field rings breathing outside, cyan glow, particles orbiting.</div>
     </section>
 
-    <!-- States / Field Colors -->
     <section>
       <div class="section-title" style="margin-bottom:10px">States — Field Color</div>
       <div class="btn-group-3" id="stateButtons">
@@ -338,7 +275,6 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
       </div>
     </section>
 
-    <!-- Emotion Triggers -->
     <section>
       <div class="section-title" style="margin-bottom:10px">Emotions</div>
       <div class="btn-group-3" style="margin-bottom:8px">
@@ -358,38 +294,35 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
       </div>
     </section>
 
-    <!-- Emotion States -->
     <section>
-      <div class="section-title" style="margin-bottom:6px">Emotion States</div>
+      <div class="section-title" style="margin-bottom:6px">Expression States</div>
       <div id="emotionStateButtons" class="btn-group-6">
         <button class="emotion-btn active" data-emotion="neutral">neutral</button>
         <button class="emotion-btn" data-emotion="sleepy">sleepy</button>
         <button class="emotion-btn" data-emotion="alert">alert</button>
         <button class="emotion-btn" data-emotion="curious">curious</button>
-        <button class="emotion-btn" data-emotion="angry">angry</button>
-        <button class="emotion-btn" data-emotion="happy">happy</button>
+        <button class="emotion-btn" data-emotion="blocked">blocked</button>
+        <button class="emotion-btn" data-emotion="complete">complete</button>
       </div>
-      <div class="desc">Sleepy: eyes scaleY 0.4 pupils down • Alert: scaleY 1.2 horns up • Curious: one horn up + 3° tilt • Angry: squint 0.6 peak down pupils small • Happy: soft eyes cheeks up</div>
+      <div class="desc">Sleepy: eyes droop, pupils shrink • Alert: brows up • Curious: tilt + one brow • Blocked: squint, guarded • Complete: brows up + cheeks lift (smile)</div>
     </section>
 
-    <!-- Effects -->
     <section>
       <div class="section-title" style="margin-bottom:14px">Effects</div>
 
-      <!-- Fly -->
       <div class="slider-group">
         <div class="slider-header">
           <span class="slider-label">Fly 0–100%</span>
           <span class="slider-value" id="flyValue">0%</span>
         </div>
         <input type="range" id="flySlider" min="0" max="100" value="0">
+        <div style="font-size:10px;color:#52525b;margin-bottom:8px">Enters from bottom-left corner</div>
         <div class="effects-row">
           <button class="btn btn-sm" data-action="flyIn">Fly-In</button>
           <button class="btn btn-sm" data-action="flyOut">Fly-Out</button>
         </div>
       </div>
 
-      <!-- Glow -->
       <div class="slider-group">
         <div class="glow-row">
           <label class="glow-label" style="font-size:11px;color:#a1a1aa">
@@ -402,7 +335,6 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
         <div class="desc">Solid normal glow</div>
       </div>
 
-      <!-- Wireframe + Transparency -->
       <div class="effects-row" style="margin-bottom:12px">
         <label class="check-row" style="padding:8px 10px">
           <input type="checkbox" id="wireframeCheck">
@@ -417,7 +349,6 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
         </div>
       </div>
 
-      <!-- IDs reference -->
       <div class="desc-mono">IDs: face, right-cheek, left-cheek, chin, right-eye, right-pupil, left-eye, left-pupil, left-horn, right-horn, widows-peak — fills #164450 #53676c #dbe2e3 #0b2228 exact. Horns+peak same #0b2228 in both versions.</div>
     </section>
 
@@ -430,12 +361,12 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
 (function() {
   'use strict';
 
-  // ---- State ----
+  // ── State ──
   const state = {
-    version: 'solid',       // 'solid' | 'ephemeral'
-    mode: 'field',          // 'field' | 'fluid' | 'order'
-    fieldState: 'idle',     // 'idle' | 'listening' | 'thinking' | 'tool' | 'speaking' | 'complete'
-    emotion: 'neutral',     // 'neutral' | 'sleepy' | 'alert' | 'curious' | 'angry' | 'happy'
+    version: 'solid',
+    mode: 'field',
+    fieldState: 'idle',
+    emotion: 'neutral',
     breathing: true,
     autoBlink: true,
     glowOn: true,
@@ -446,7 +377,6 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
     peakAboveEyes: true,
   };
 
-  // Field state colors
   const FIELD_COLORS = {
     idle:     '#00E5FF',
     listening:'#00FF9D',
@@ -456,67 +386,123 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
     complete: '#4ADE80',
   };
 
-  // ---- DOM refs ----
+  // ── DOM ──
   const svg = document.getElementById('linkSvg');
   const owlGroup = document.getElementById('owlGroup');
   const owlScale = document.getElementById('owlScale');
   const energyField = document.getElementById('energyField');
   const particles = document.getElementById('particles');
-  const ring1 = document.getElementById('ring1');
-  const ring2 = document.getElementById('ring2');
-  const ring3 = document.getElementById('ring3');
-
-  const glowFilter = document.getElementById('glowSolid');
+  const fluidOverlay = document.getElementById('fluidOverlay');
+  const fluidTurb = document.getElementById('fluidTurb');
   const glowBlur = document.getElementById('glowSolidBlur');
   const glowFlood = document.getElementById('glowSolidFlood');
-  const glowEphFilter = document.getElementById('glowEphemeral');
-
-  // Eye / pupil groups
   const leftEyeGroup = document.getElementById('leftEyeGroup');
   const rightEyeGroup = document.getElementById('rightEyeGroup');
   const leftPupilGroup = document.getElementById('leftPupilGroup');
   const rightPupilGroup = document.getElementById('rightPupilGroup');
   const leftHornGroup = document.getElementById('leftHornGroup');
   const rightHornGroup = document.getElementById('rightHornGroup');
+  const leftCheekGroup = document.getElementById('leftCheekGroup');
+  const rightCheekGroup = document.getElementById('rightCheekGroup');
   const peakGroup = document.getElementById('peakGroup');
-
-  // Badges
   const badgeEnergy = document.getElementById('badgeEnergy');
   const badgeMode = document.getElementById('badgeMode');
   const canvasStats = document.getElementById('canvasStats');
-  const colorInfo = document.getElementById('colorInfo');
   const flyPercent = document.getElementById('flyPercent');
   const statusDot = document.getElementById('statusDot');
-
-  // Mode description
   const modeDesc = document.getElementById('modeDesc');
 
-  // ---- Helpers ----
-  function setAttr(el, attr, val) {
-    if (el) el.setAttribute(attr, val);
-  }
-  function setStyle(el, prop, val) {
-    if (el) el.style[prop] = val;
+  // ── Orbital particle data (relative to center 207.8,207) ──
+  const CENTER_X = 207.8, CENTER_Y = 207;
+  const PARTICLE_DATA = [
+    { x:367.17, y:126.32, r:2.2, speed:0.18, phase:0 },
+    { x:429.51, y:234.27, r:1.4, speed:-0.12, phase:1.2 },
+    { x:354.75, y:354.11, r:2.2, speed:0.22, phase:2.8 },
+    { x:174.57, y:344.95, r:1.4, speed:-0.15, phase:4.1 },
+    { x:23.92,  y:299.20, r:2.2, speed:0.20, phase:0.6 },
+    { x:-43.47, y:176.32, r:1.4, speed:-0.18, phase:3.3 },
+    { x:95.43,  y:92.58,  r:2.2, speed:0.16, phase:5.0 },
+    { x:246.14, y:49.34,  r:1.4, speed:-0.14, phase:1.8 },
+    // extra particles for density
+    { x:300, y:80,  r:1.8, speed:0.25, phase:0.9 },
+    { x:100, y:340, r:1.8, speed:-0.20, phase:3.7 },
+    { x:380, y:300, r:1.2, speed:0.30, phase:2.2 },
+    { x:30,  y:70,  r:1.2, speed:-0.25, phase:4.5 },
+  ];
+
+  // Pre-compute orbital radii and base angles
+  let particleOrbits = PARTICLE_DATA.map(p => {
+    const dx = p.x - CENTER_X;
+    const dy = p.y - CENTER_Y;
+    return {
+      radius: Math.sqrt(dx*dx + dy*dy),
+      baseAngle: Math.atan2(dy, dx),
+      r: p.r,
+      speed: p.speed,
+      phase: p.phase,
+    };
+  });
+
+  // Populate particle circles in SVG
+  let particleElements = [];
+  particleOrbits.forEach((orb, i) => {
+    const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    c.setAttribute('r', orb.r);
+    c.setAttribute('opacity', 0.5 + Math.random() * 0.5);
+    particles.appendChild(c);
+    particleElements.push(c);
+  });
+  function updateParticles(time) {
+    const cx = CENTER_X, cy = CENTER_Y;
+    particleOrbits.forEach((orb, i) => {
+      const angle = orb.baseAngle + time * orb.speed * 0.001 + orb.phase;
+      const x = cx + Math.cos(angle) * orb.radius;
+      const y = cy + Math.sin(angle) * orb.radius * 0.7; // flatten for perspective
+      particleElements[i].setAttribute('cx', x);
+      particleElements[i].setAttribute('cy', y);
+    });
   }
 
-  // ---- Apply field color ----
+  // ── Fluid turbulence animation ──
+  let fluidSeed = 1;
+  function tickFluid() {
+    if (state.mode !== 'fluid') return;
+    fluidSeed = (fluidSeed + 1) % 10000;
+    if (fluidTurb) fluidTurb.setAttribute('seed', fluidSeed);
+  }
+
+  // ── Main animation loop ──
+  let animTime = 0;
+  let fieldAngle = 0;
+
+  function animate(timestamp) {
+    animTime = timestamp || 0;
+
+    // Update particle orbits
+    updateParticles(animTime);
+
+    // Rotate field rings slowly
+    fieldAngle = (animTime * 0.015) % 360;
+    energyField.style.transformOrigin = '207.8px 207px';
+    energyField.style.transform = `rotate(${fieldAngle}deg)`;
+
+    // Fluid turbulence evolution
+    tickFluid();
+
+    requestAnimationFrame(animate);
+  }
+
+  // ── Apply field color ──
   function applyFieldColor(color) {
-    const solid = '#00E5FF'; // default cyan
-    const c = color || FIELD_COLORS[state.fieldState] || solid;
-
-    // Energy field stroke/fill
-    setAttr(energyField, 'stroke', c);
-    if (particles) particles.setAttribute('fill', c);
-
-    // Glow filter flood colors
-    const flood1 = glowFlood;
-    const eph1 = document.getElementById('glowEphFlood1');
-    const eph2 = document.getElementById('glowEphFlood2');
-    if (flood1) setAttr(flood1, 'flood-color', c);
-    if (eph1) setAttr(eph1, 'flood-color', c);
-    if (eph2) setAttr(eph2, 'flood-color', c);
-
-    // Fluid gradient
+    const c = color || FIELD_COLORS[state.fieldState] || '#00E5FF';
+    energyField.setAttribute('stroke', c);
+    particles.setAttribute('fill', c);
+    const f1 = document.getElementById('glowSolidFlood');
+    const f2 = document.getElementById('glowEphFlood1');
+    const f3 = document.getElementById('glowEphFlood2');
+    if (f1) f1.setAttribute('flood-color', c);
+    if (f2) f2.setAttribute('flood-color', c);
+    if (f3) f3.setAttribute('flood-color', c);
     const fluidGrad = document.getElementById('fluidGrad');
     if (fluidGrad) {
       const stops = fluidGrad.querySelectorAll('stop');
@@ -525,157 +511,207 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
         stops[1].setAttribute('stop-color', c);
       }
     }
-
-    // Status dot
     if (statusDot) statusDot.style.background = c;
-
-    // Badge
     if (badgeEnergy) {
-      badgeEnergy.textContent = 'energy • ' + state.fieldState.charAt(0).toUpperCase() + state.fieldState.slice(1);
+      const label = state.fieldState.charAt(0).toUpperCase() + state.fieldState.slice(1);
+      badgeEnergy.textContent = 'energy • ' + label;
     }
   }
 
-  // ---- Apply mode (field / fluid / order) ----
+  // ── Apply mode ──
   function applyMode() {
     const m = state.mode;
-
-    // Reset field visibility
     energyField.style.display = '';
-    energyField.style.opacity = '0.95';
-    owlGroup.style.filter = state.version === 'ephemeral' ? 'url(#glowEphemeral)' : 'url(#glowSolid)';
-    
-    // Remove fluid/order classes from owl
-    owlGroup.style.filter = state.version === 'ephemeral' ? 'url(#glowEphemeral)' : 'url(#glowSolid)';
+    energyField.style.filter = 'none';
+    fluidOverlay.setAttribute('display', 'none');
+    owlGroup.style.display = '';
 
     if (m === 'field') {
-      // Default: crisp owl + field rings + particles
       modeDesc.textContent = 'Crisp owl core + 3 field rings breathing outside, cyan glow, particles orbiting.';
-      owlGroup.style.filter = state.version === 'ephemeral' ? 'url(#glowEphemeral)' : 'url(#glowSolid)';
-      energyField.style.display = '';
     } else if (m === 'fluid') {
-      // Fluid: displacement map on field
-      modeDesc.textContent = 'Fluid organic distortion inside the owl silhouette — turbulence warps the energy field, owl stays sharp.';
-      // Add fluid filter to energy field group
-      energyField.style.filter = 'url(#fluidFilter)';
-      energyField.style.display = '';
-      // Fill field with gradient
-      energyField.style.background = '';
+      modeDesc.textContent = 'Organic fluid distortion inside the owl silhouette — turbulence evolves continuously, color shifts with field state.';
+      fluidOverlay.removeAttribute('display');
     } else if (m === 'order') {
-      // Order emerging: particles align
-      modeDesc.textContent = 'Chaos to order — particles spiral inward and sync into a coherent ring formation around the owl.';
-      energyField.style.filter = '';
-      energyField.style.display = '';
+      modeDesc.textContent = 'Chaos to order — particles spiral inward as the owl emerges: eyes first, blink, horns, then face from the background.';
+      startOrderEmerging();
     }
 
-    // Update mode buttons
     document.querySelectorAll('[data-mode]').forEach(b => {
       b.classList.toggle('btn-active', b.dataset.mode === m);
     });
   }
 
-  // ---- Apply version (solid / ephemeral) ----
-  function applyVersion() {
-    const v = state.version;
-    const isEph = v === 'ephemeral';
+  // ── Order Emerging sequence ──
+  let orderAnimActive = false;
+  let orderAnimTimer = null;
 
-    owlGroup.style.filter = isEph ? 'url(#glowEphemeral)' : 'url(#glowSolid)';
-    owlGroup.style.opacity = isEph ? state.transparency : state.transparency;
+  function startOrderEmerging() {
+    if (orderAnimTimer) { clearTimeout(orderAnimTimer); orderAnimTimer = null; }
+    orderAnimActive = true;
 
-    // Bigger glow for ephemeral
-    const blur = glowBlur;
-    if (blur) {
-      setAttr(blur, 'stdDeviation', isEph ? String(state.glowIntensity * 2.2) : String(state.glowIntensity * 2.2 * 0.6));
-    }
+    // Set all identity elements to transparent
+    const allParts = [owlGroup, leftEyeGroup, rightEyeGroup, leftPupilGroup, rightPupilGroup,
+                      leftHornGroup, rightHornGroup, leftCheekGroup, rightCheekGroup,
+                      peakGroup, document.getElementById('face'), document.getElementById('chin')];
+    // Hide owl
+    owlGroup.style.display = 'none';
 
-    // Badge
-    if (badgeMode) badgeMode.textContent = isEph ? 'ephemeral' : 'solid';
+    // Phase 0: show field only, build anticipation
+    // Phase 1 (after 800ms): eyes fade in
+    setTimeout(() => {
+      owlGroup.style.display = '';
+      owlGroup.style.opacity = '0';
+      leftEyeGroup.style.opacity = '0';
+      rightEyeGroup.style.opacity = '0';
+      leftPupilGroup.style.opacity = '0';
+      rightPupilGroup.style.opacity = '0';
+      leftHornGroup.style.opacity = '0';
+      rightHornGroup.style.opacity = '0';
+      leftCheekGroup.style.opacity = '0';
+      rightCheekGroup.style.opacity = '0';
+      peakGroup.style.opacity = '0';
+      document.getElementById('face').style.opacity = '0';
+      document.getElementById('chin').style.opacity = '0';
 
-    // Ephemeral description
-    const ephInner = document.getElementById('glowEphInnerBlur');
-    if (ephInner) {
-      setAttr(ephInner, 'stdDeviation', String(state.glowIntensity * 2.2));
-    }
+      // Phase 2 (after 400ms): eyes appear + blink
+      setTimeout(() => {
+        leftEyeGroup.style.transition = 'opacity .6s ease, transform .12s ease';
+        rightEyeGroup.style.transition = 'opacity .6s ease, transform .12s ease';
+        leftPupilGroup.style.transition = 'opacity .6s ease, transform .12s ease';
+        rightPupilGroup.style.transition = 'opacity .6s ease, transform .12s ease';
+        leftEyeGroup.style.opacity = '1';
+        rightEyeGroup.style.opacity = '1';
+        leftPupilGroup.style.opacity = '1';
+        rightPupilGroup.style.opacity = '1';
 
-    document.querySelectorAll('[data-version]').forEach(b => {
-      b.classList.toggle('btn-active', b.dataset.version === v);
-    });
+        // Blink after eyes appear
+        setTimeout(() => {
+          triggerBlink();
+          // Phase 3 (after blink): horns fade in
+          setTimeout(() => {
+            leftHornGroup.style.transition = 'opacity .8s ease';
+            rightHornGroup.style.transition = 'opacity .8s ease';
+            leftHornGroup.style.opacity = '1';
+            rightHornGroup.style.opacity = '1';
+
+            // Phase 4: face, cheeks, chin, peak fade in together
+            setTimeout(() => {
+              const fadeParts = [document.getElementById('face'), document.getElementById('chin'),
+                                leftCheekGroup, rightCheekGroup, peakGroup];
+              fadeParts.forEach(el => { if (el) { el.style.transition = 'opacity 1s ease'; el.style.opacity = '1'; } });
+              owlGroup.style.transition = 'opacity 1.2s ease';
+              owlGroup.style.opacity = state.transparency;
+
+              // Phase 5: settled
+              setTimeout(() => {
+                // Clean up inline opacities (rely on CSS/controls now)
+                [leftEyeGroup, rightEyeGroup, leftPupilGroup, rightPupilGroup,
+                 leftHornGroup, rightHornGroup, leftCheekGroup, rightCheekGroup,
+                 peakGroup, document.getElementById('face'), document.getElementById('chin')].forEach(el => {
+                  if (el) { el.style.transition = ''; el.style.opacity = ''; }
+                });
+                owlGroup.style.transition = '';
+                owlGroup.style.opacity = state.transparency;
+                orderAnimActive = false;
+              }, 1200);
+            }, 800);
+          }, 500);
+        }, 700);
+      }, 400);
+    }, 200);
   }
 
-  // ---- Apply emotion state ----
+  // ── Apply version ──
+  function applyVersion() {
+    const isEph = state.version === 'ephemeral';
+    owlGroup.style.filter = isEph ? 'url(#glowEphemeral)' : 'url(#glowSolid)';
+    // Ephemeral: much more ghostly
+    const baseOpacity = isEph ? 0.55 : state.transparency;
+    owlGroup.style.opacity = baseOpacity * state.transparency;
+    if (glowBlur) {
+      const blurVal = isEph ? state.glowIntensity * 3.5 : state.glowIntensity * 2.2 * 0.6;
+      glowBlur.setAttribute('stdDeviation', blurVal);
+    }
+    const inner = document.getElementById('glowEphInnerBlur');
+    if (inner) inner.setAttribute('stdDeviation', state.glowIntensity * 3.0);
+    badgeMode.textContent = isEph ? 'ephemeral' : 'solid';
+    document.querySelectorAll('[data-version]').forEach(b => {
+      b.classList.toggle('btn-active', b.dataset.version === state.version);
+    });
+    // Update glow application
+    applyGlow();
+  }
+
+  // ── Apply expression state ──
   function applyEmotion() {
     const e = state.emotion;
 
-    // Reset all transforms on eye/pupil/horn groups
-    setStyle(leftEyeGroup, 'transform', '');
-    setStyle(rightEyeGroup, 'transform', '');
-    setStyle(leftPupilGroup, 'transform', '');
-    setStyle(rightPupilGroup, 'transform', '');
-    setStyle(leftHornGroup, 'transform', '');
-    setStyle(rightHornGroup, 'transform', '');
-    setStyle(peakGroup, 'transform', '');
-
-    // Reset pupil positions
-    setAttr(document.getElementById('leftPupil'), 'cx', '143.02325');
-    setAttr(document.getElementById('leftPupil'), 'cy', '214.6857');
-    setAttr(document.getElementById('rightPupil'), 'cx', '270.70145');
-    setAttr(document.getElementById('rightPupil'), 'cy', '217.88528');
-    setAttr(document.getElementById('leftPupil'), 'rx', '22.53536');
-    setAttr(document.getElementById('rightPupil'), 'rx', '21.408592');
-
-    const pupilScale = 1;
-    const eyeScaleY = 1;
+    // Reset all
+    [leftEyeGroup, rightEyeGroup, leftPupilGroup, rightPupilGroup,
+     leftHornGroup, rightHornGroup, leftCheekGroup, rightCheekGroup,
+     peakGroup].forEach(el => { if (el) { el.style.transform = ''; } });
+    owlGroup.style.transform = '';
+    document.getElementById('leftPupil').setAttribute('cx', '143.02325');
+    document.getElementById('leftPupil').setAttribute('cy', '214.6857');
+    document.getElementById('rightPupil').setAttribute('cx', '270.70145');
+    document.getElementById('rightPupil').setAttribute('cy', '217.88528');
+    document.getElementById('leftPupil').setAttribute('rx', '22.53536');
+    document.getElementById('rightPupil').setAttribute('rx', '21.408592');
+    document.getElementById('leftPupil').setAttribute('ry', '19.028851');
+    document.getElementById('rightPupil').setAttribute('ry', '20.116211');
 
     switch (e) {
-      case 'neutral':
-        // Default - nothing to change
-        break;
+      case 'neutral': break;
       case 'sleepy':
-        setStyle(leftEyeGroup, 'transform', 'scaleY(0.4)');
-        setStyle(rightEyeGroup, 'transform', 'scaleY(0.4)');
-        setStyle(leftPupilGroup, 'transform', 'translateY(8px)');
-        setStyle(rightPupilGroup, 'transform', 'translateY(8px)');
+        // Eyes droop (scaleY from center) + pupils shrink & drop
+        leftEyeGroup.style.transform = 'scaleY(0.35)';
+        rightEyeGroup.style.transform = 'scaleY(0.35)';
+        leftPupilGroup.style.transform = 'translateY(6px) scale(0.55)';
+        rightPupilGroup.style.transform = 'translateY(6px) scale(0.55)';
         break;
       case 'alert':
-        setStyle(leftEyeGroup, 'transform', 'scaleY(1.2)');
-        setStyle(rightEyeGroup, 'transform', 'scaleY(1.2)');
-        setStyle(leftHornGroup, 'transform', 'translateY(-6px)');
-        setStyle(rightHornGroup, 'transform', 'translateY(-6px)');
+        leftEyeGroup.style.transform = 'scaleY(1.2)';
+        rightEyeGroup.style.transform = 'scaleY(1.2)';
+        leftHornGroup.style.transform = 'translateY(-7px)';
+        rightHornGroup.style.transform = 'translateY(-7px)';
         break;
       case 'curious':
-        setStyle(leftHornGroup, 'transform', 'translateY(-4px)');
-        setStyle(owlGroup, 'transform', 'rotate(3deg)');
-        // Will restore owlGroup rotation on next frame
-        setTimeout(() => {
-          if (state.emotion !== 'curious') return;
-        }, 50);
+        owlGroup.style.transform = 'rotate(5deg)';
+        leftHornGroup.style.transform = 'translateY(-5px)';
         break;
-      case 'angry':
-        setStyle(leftEyeGroup, 'transform', 'scaleY(0.6)');
-        setStyle(rightEyeGroup, 'transform', 'scaleY(0.6)');
-        setAttr(document.getElementById('leftPupil'), 'rx', '14');
-        setAttr(document.getElementById('rightPupil'), 'rx', '13');
-        setStyle(peakGroup, 'transform', 'translateY(4px)');
+      case 'blocked':
+        // Squint + guarded posture — pupils contract
+        leftEyeGroup.style.transform = 'scaleY(0.55)';
+        rightEyeGroup.style.transform = 'scaleY(0.55)';
+        document.getElementById('leftPupil').setAttribute('rx', '13');
+        document.getElementById('rightPupil').setAttribute('rx', '12');
+        document.getElementById('leftPupil').setAttribute('ry', '11');
+        document.getElementById('rightPupil').setAttribute('ry', '11');
+        peakGroup.style.transform = 'translateY(3px)';
         break;
-      case 'happy':
-        setStyle(leftEyeGroup, 'transform', 'scaleY(0.85)');
-        setStyle(rightEyeGroup, 'transform', 'scaleY(0.85)');
+      case 'complete':
+        // Horns up + cheeks lift = symbolic smile
+        leftHornGroup.style.transform = 'translateY(-6px)';
+        rightHornGroup.style.transform = 'translateY(-6px)';
+        leftCheekGroup.style.transform = 'translateY(-4px)';
+        rightCheekGroup.style.transform = 'translateY(-4px)';
+        // Soft eye squint
+        leftEyeGroup.style.transform = 'scaleY(0.88)';
+        rightEyeGroup.style.transform = 'scaleY(0.88)';
         break;
     }
 
-    // Update buttons
     document.querySelectorAll('[data-emotion]').forEach(b => {
       b.classList.toggle('active', b.dataset.emotion === e);
     });
-
-    // Stats
     updateStats();
   }
 
-  // ---- Emotion triggers (temporary) ----
+  // ── Emotion triggers ──
   function triggerBlink() {
-    ['left','right'].forEach(side => {
-      const eye = document.getElementById(side + 'EyeGroup');
-      const pupil = document.getElementById(side + 'PupilGroup');
+    ['left','right'].forEach(s => {
+      const eye = document.getElementById(s + 'EyeGroup');
+      const pupil = document.getElementById(s + 'PupilGroup');
       if (eye) eye.style.transform = 'scaleY(0.05)';
       if (pupil) pupil.style.transform = 'scaleY(0.05)';
       setTimeout(() => {
@@ -696,130 +732,99 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
     }, 220);
   }
 
-  // ---- Stats ----
-  function updateStats() {
-    canvasStats.textContent = `peak ABOVE eyes ✓ | glow ${state.glowIntensity.toFixed(1)} | ${state.emotion}`;
-    flyPercent.textContent = `${state.flyPercent}% fly`;
-  }
-
-  // ---- Breathing animation ----
+  // ── Breathing ──
   let breathAnimId = null;
-  let breathTime = 0;
-
   function startBreathing() {
     stopBreathing();
     if (!state.breathing) return;
-    const period = 2000; // 2s
-    const minScale = 0.98;
-    const maxScale = 1.02;
-
-    function tick(timestamp) {
-      if (!state.breathing) { stopBreathing(); return; }
-      breathTime = (breathTime + 16) % period;
-      const phase = (breathTime / period) * Math.PI * 2;
-      const s = minScale + (maxScale - minScale) * (0.5 + 0.5 * Math.sin(phase - Math.PI / 2));
-      owlScale.style.transform = `translate(${(1 - s) * 100}px, ${(1 - s) * 120}px) scale(${s})`;
-      // Also rotate field
+    const period = 2000;
+    let t = 0;
+    function tick(ts) {
+      if (!state.breathing) return;
+      t = (t + 16) % period;
+      const phase = (t / period) * Math.PI * 2;
+      const s = 0.98 + 0.04 * (0.5 + 0.5 * Math.sin(phase - Math.PI / 2));
+      owlScale.style.transform = `scale(${s})`;
       breathAnimId = requestAnimationFrame(tick);
     }
     breathAnimId = requestAnimationFrame(tick);
   }
-
   function stopBreathing() {
     if (breathAnimId) { cancelAnimationFrame(breathAnimId); breathAnimId = null; }
   }
 
-  // ---- Fly animation ----
-  function flyIn() {
-    let startVal = state.flyPercent;
-    const target = 100;
-    const duration = 600;
-    const startTime = performance.now();
-
-    function tick(now) {
-      const t = Math.min((now - startTime) / duration, 1);
-      const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-      const val = startVal + (target - startVal) * eased;
-      state.flyPercent = Math.round(val);
-      document.getElementById('flySlider').value = state.flyPercent;
-      document.getElementById('flyValue').textContent = state.flyPercent + '%';
-      flyPercent.textContent = state.flyPercent + '% fly';
-      applyFlyTransform(state.flyPercent);
-      if (t < 1) requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-  }
-
-  function flyOut() {
-    let startVal = state.flyPercent;
-    const target = 0;
-    const duration = 600;
-    const startTime = performance.now();
-
-    function tick(now) {
-      const t = Math.min((now - startTime) / duration, 1);
-      const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-      const val = startVal + (target - startVal) * eased;
-      state.flyPercent = Math.round(val);
-      document.getElementById('flySlider').value = state.flyPercent;
-      document.getElementById('flyValue').textContent = state.flyPercent + '%';
-      flyPercent.textContent = state.flyPercent + '% fly';
-      applyFlyTransform(state.flyPercent);
-      if (t < 1) requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-  }
-
+  // ── Fly (bottom-left corner) ──
   function applyFlyTransform(pct) {
-    const scale = 1 - pct * 0.007;
-    const translateY = pct * 3;
-    owlScale.style.transform = `translate(0, ${translateY}px) scale(${Math.max(scale, 0.3)})`;
+    const f = pct / 100;
+    // Bottom-left entrance: starts at (-300, +280) and moves to (0,0)
+    const tx = -300 * f;
+    const ty = 280 * f;
+    const s = 1 - f * 0.5;
+    owlScale.style.transform = `translate(${tx}px, ${ty}px) scale(${Math.max(s, 0.5)})`;
   }
 
-  // ---- Wireframe ----
+  function flyTo(targetPct) {
+    const start = state.flyPercent;
+    const dur = 600;
+    const t0 = performance.now();
+    function tick(now) {
+      const t = Math.min((now - t0) / dur, 1);
+      const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+      const val = start + (targetPct - start) * eased;
+      state.flyPercent = Math.round(val);
+      document.getElementById('flySlider').value = state.flyPercent;
+      document.getElementById('flyValue').textContent = state.flyPercent + '%';
+      flyPercent.textContent = state.flyPercent + '% fly';
+      applyFlyTransform(state.flyPercent);
+      if (t < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  function flyIn() { flyTo(0); }
+  function flyOut() { flyTo(100); }
+
+  // ── Wireframe ──
   function applyWireframe() {
-    const isWf = state.wireframe;
-    document.querySelectorAll('#face, #rightCheek, #leftCheek, #chin, #leftHorn, #rightHorn, #widowsPeak, #leftEye, #rightEye').forEach(el => {
-      if (isWf) {
+    const wf = state.wireframe;
+    const ids = ['face','rightCheek','leftCheek','chin','leftHorn','rightHorn','widowsPeak','leftEye','rightEye'];
+    const fills = {
+      face:'#164450', rightCheek:'#164450', leftCheek:'#164450', chin:'#164450',
+      leftHorn:'#0b2228', rightHorn:'#0b2228', widowsPeak:'#0b2228',
+      leftEye:'#53676c', rightEye:'#53676c'
+    };
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (wf) {
         el.setAttribute('fill', 'none');
         el.setAttribute('stroke', '#0b2228');
         el.setAttribute('stroke-width', '1.2');
       } else {
         el.removeAttribute('stroke');
         el.removeAttribute('stroke-width');
-        // Restore fills
-        const id = el.id;
-        if (id === 'face' || id === 'rightCheek' || id === 'leftCheek' || id === 'chin') el.setAttribute('fill', '#164450');
-        else if (id === 'leftHorn' || id === 'rightHorn' || id === 'widowsPeak') el.setAttribute('fill', '#0b2228');
-        else if (id === 'leftEye' || id === 'rightEye') el.setAttribute('fill', '#53676c');
+        el.setAttribute('fill', fills[id] || '#164450');
       }
     });
   }
 
-  // ---- Auto blink ----
+  // ── Auto blink ──
   let autoBlinkTimer = null;
-
   function scheduleAutoBlink() {
     clearTimeout(autoBlinkTimer);
     if (!state.autoBlink) return;
-    const delay = 3000 + Math.random() * 2000; // 3-5s
-    autoBlinkTimer = setTimeout(() => {
-      triggerBlink();
-      scheduleAutoBlink();
-    }, delay);
+    autoBlinkTimer = setTimeout(() => { triggerBlink(); scheduleAutoBlink(); }, 3000 + Math.random() * 2000);
   }
 
-  // ---- Glow ----
+  // ── Glow ──
   function applyGlow() {
     const g = state.glowIntensity;
-    const blur = glowBlur;
-    if (blur) {
-      const isEph = state.version === 'ephemeral';
-      setAttr(blur, 'stdDeviation', isEph ? String(g * 2.2) : String(g * 2.2 * 0.6));
-    }
-    // Toggle glow visibility — can't really turn off SVG filter, so we remove it
+    const isEph = state.version === 'ephemeral';
+    if (glowBlur) glowBlur.setAttribute('stdDeviation', isEph ? g * 3.5 : g * 2.2 * 0.6);
+    const inner = document.getElementById('glowEphInnerBlur');
+    if (inner) inner.setAttribute('stdDeviation', g * 3.0);
     if (state.glowOn) {
-      owlGroup.style.filter = state.version === 'ephemeral' ? 'url(#glowEphemeral)' : 'url(#glowSolid)';
+      owlGroup.style.filter = isEph ? 'url(#glowEphemeral)' : 'url(#glowSolid)';
     } else {
       owlGroup.style.filter = 'none';
     }
@@ -827,13 +832,21 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
     updateStats();
   }
 
-  // ---- Transparency ----
+  // ── Transparency ──
   function applyTransparency() {
-    owlGroup.style.opacity = state.transparency;
+    const isEph = state.version === 'ephemeral';
+    const baseOpacity = isEph ? 0.55 : 1;
+    owlGroup.style.opacity = baseOpacity * state.transparency;
     document.getElementById('transparencyValue').textContent = state.transparency.toFixed(2);
   }
 
-  // ---- Init ----
+  // ── Stats ──
+  function updateStats() {
+    canvasStats.textContent = `peak ABOVE eyes ✓ | glow ${state.glowIntensity.toFixed(1)} | ${state.emotion}`;
+    flyPercent.textContent = `${state.flyPercent}% fly`;
+  }
+
+  // ── Init ──
   function init() {
     applyFieldColor(FIELD_COLORS.idle);
     applyMode();
@@ -844,40 +857,49 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
     updateStats();
     if (state.breathing) startBreathing();
     if (state.autoBlink) scheduleAutoBlink();
+    requestAnimationFrame(animate);
   }
 
-  // ---- Event Binding ----
-
-  // Version buttons
-  document.querySelectorAll('[data-version]').forEach(btn => {
-    btn.addEventListener('click', function() {
+  // ── Event wiring ──
+  document.querySelectorAll('[data-version]').forEach(b => {
+    b.addEventListener('click', function() {
       state.version = this.dataset.version;
+      document.querySelectorAll('[data-version]').forEach(x => x.classList.toggle('btn-active', x.dataset.version === state.version));
       applyVersion();
-      applyGlow();
+      applyTransparency();
     });
   });
 
-  // Mode buttons
-  document.querySelectorAll('[data-mode]').forEach(btn => {
-    btn.addEventListener('click', function() {
+  document.querySelectorAll('[data-mode]').forEach(b => {
+    b.addEventListener('click', function() {
+      if (orderAnimActive) { clearTimeout(orderAnimTimer); orderAnimTimer = null; orderAnimActive = false; }
+      // Restore all visibilities
+      [leftEyeGroup, rightEyeGroup, leftPupilGroup, rightPupilGroup,
+       leftHornGroup, rightHornGroup, leftCheekGroup, rightCheekGroup,
+       peakGroup, document.getElementById('face'), document.getElementById('chin')].forEach(el => {
+        if (el) { el.style.transition = ''; el.style.opacity = ''; }
+      });
+      owlGroup.style.display = '';
+      owlGroup.style.transition = '';
+      owlGroup.style.opacity = state.version === 'ephemeral' ? 0.55 * state.transparency : state.transparency;
+      energyField.style.display = '';
+      fluidOverlay.setAttribute('display', 'none');
+
       state.mode = this.dataset.mode;
       applyMode();
     });
   });
 
-  // State buttons
-  document.querySelectorAll('[data-state]').forEach(btn => {
-    btn.addEventListener('click', function() {
-      const st = this.dataset.state;
-      state.fieldState = st;
-      document.querySelectorAll('[data-state]').forEach(b => b.classList.toggle('active', b.dataset.state === st));
-      applyFieldColor(FIELD_COLORS[st]);
+  document.querySelectorAll('[data-state]').forEach(b => {
+    b.addEventListener('click', function() {
+      state.fieldState = this.dataset.state;
+      document.querySelectorAll('[data-state]').forEach(x => x.classList.toggle('active', x.dataset.state === state.fieldState));
+      applyFieldColor(FIELD_COLORS[state.fieldState]);
     });
   });
 
-  // Emotion triggers
-  document.querySelectorAll('[data-trigger]').forEach(btn => {
-    btn.addEventListener('click', function() {
+  document.querySelectorAll('[data-trigger]').forEach(b => {
+    b.addEventListener('click', function() {
       const t = this.dataset.trigger;
       if (t === 'blink') triggerBlink();
       else if (t === 'winkLeft') triggerWink('left');
@@ -885,19 +907,16 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
     });
   });
 
-  // Emotion states
-  document.querySelectorAll('[data-emotion]').forEach(btn => {
-    btn.addEventListener('click', function() {
+  document.querySelectorAll('[data-emotion]').forEach(b => {
+    b.addEventListener('click', function() {
       state.emotion = this.dataset.emotion;
-      // Reapply owlGroup rotation for curious
       owlGroup.style.transform = '';
       applyEmotion();
     });
   });
 
-  // Mobile buttons
-  document.querySelectorAll('[data-mobile]').forEach(btn => {
-    btn.addEventListener('click', function() {
+  document.querySelectorAll('[data-mobile]').forEach(b => {
+    b.addEventListener('click', function() {
       const a = this.dataset.mobile;
       if (a === 'blink') triggerBlink();
       else if (a === 'wleft') triggerWink('left');
@@ -906,40 +925,44 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
         state.breathing = !state.breathing;
         this.classList.toggle('active');
         document.getElementById('breathingCheck').checked = state.breathing;
-        if (state.breathing) startBreathing(); else stopBreathing();
-      }
-      else if (a === 'mode') {
-        // Cycle through modes
-        const modes = ['field', 'fluid', 'order'];
+        state.breathing ? startBreathing() : stopBreathing();
+      } else if (a === 'mode') {
+        const modes = ['field','fluid','order'];
         const idx = modes.indexOf(state.mode);
         state.mode = modes[(idx + 1) % modes.length];
+        // Reset mode state
+        if (orderAnimActive) { clearTimeout(orderAnimTimer); orderAnimTimer = null; orderAnimActive = false; }
+        [leftEyeGroup, rightEyeGroup, leftPupilGroup, rightPupilGroup,
+         leftHornGroup, rightHornGroup, leftCheekGroup, rightCheekGroup,
+         peakGroup, document.getElementById('face'), document.getElementById('chin')].forEach(el => {
+          if (el) { el.style.transition = ''; el.style.opacity = ''; }
+        });
+        owlGroup.style.display = '';
+        owlGroup.style.transition = '';
+        owlGroup.style.opacity = state.version === 'ephemeral' ? 0.55 * state.transparency : state.transparency;
+        energyField.style.display = '';
+        fluidOverlay.setAttribute('display', 'none');
         applyMode();
       }
     });
   });
 
-  // Breathing checkbox
   document.getElementById('breathingCheck').addEventListener('change', function() {
     state.breathing = this.checked;
-    const mb = document.querySelector('[data-mobile="breath"]');
-    if (mb) mb.classList.toggle('active', state.breathing);
-    if (state.breathing) startBreathing(); else stopBreathing();
+    document.querySelector('[data-mobile="breath"]')?.classList.toggle('active', state.breathing);
+    state.breathing ? startBreathing() : stopBreathing();
   });
 
-  // Auto blink checkbox
   document.getElementById('autoBlinkCheck').addEventListener('change', function() {
     state.autoBlink = this.checked;
-    if (state.autoBlink) scheduleAutoBlink(); else clearTimeout(autoBlinkTimer);
+    state.autoBlink ? scheduleAutoBlink() : clearTimeout(autoBlinkTimer);
   });
 
-  // Layer checkbox
   document.getElementById('layerCheck').addEventListener('change', function() {
     state.peakAboveEyes = this.checked;
-    // Widow's peak is already the last element in the owl, so visibility toggle
     peakGroup.style.display = state.peakAboveEyes ? '' : 'none';
   });
 
-  // Fly slider
   document.getElementById('flySlider').addEventListener('input', function() {
     state.flyPercent = parseInt(this.value);
     document.getElementById('flyValue').textContent = state.flyPercent + '%';
@@ -947,35 +970,29 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
     applyFlyTransform(state.flyPercent);
   });
 
-  // Fly buttons
   document.querySelector('[data-action="flyIn"]').addEventListener('click', flyIn);
   document.querySelector('[data-action="flyOut"]').addEventListener('click', flyOut);
 
-  // Glow checkbox
   document.getElementById('glowCheck').addEventListener('change', function() {
     state.glowOn = this.checked;
     applyGlow();
   });
 
-  // Glow slider
   document.getElementById('glowSlider').addEventListener('input', function() {
     state.glowIntensity = parseFloat(this.value);
     applyGlow();
   });
 
-  // Wireframe checkbox
   document.getElementById('wireframeCheck').addEventListener('change', function() {
     state.wireframe = this.checked;
     applyWireframe();
   });
 
-  // Transparency slider
   document.getElementById('transparencySlider').addEventListener('input', function() {
     state.transparency = parseFloat(this.value);
     applyTransparency();
   });
 
-  // ---- Go ----
   init();
 })();
 </script>
