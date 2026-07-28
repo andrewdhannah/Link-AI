@@ -675,3 +675,51 @@ not discarded work — they document why the contract exists:
 
 Without this history, a future contributor might ask "why not just make the
 owl more fluid?" The answer is preserved in the failure trail.
+
+---
+
+## 18. SVG Identity Qualification
+
+Following the same governance pattern as other platform assets, `LINK.svg`
+should carry identity metadata that allows a renderer to assert compatibility:
+
+```json
+{
+  "identity": "LINK",
+  "version": "1.0",
+  "geometry_hash": "sha256:...",
+  "contract": "LINK-VISUAL-CONTRACT-001",
+  "supported_expressions": [
+    "neutral", "sleepy", "alert", "curious",
+    "blocked", "complete"
+  ],
+  "supported_render_modes": [
+    "solid", "ephemeral", "fluid_brain"
+  ]
+}
+```
+
+This follows the standard qualification lifecycle:
+
+| State | Meaning |
+|-------|---------|
+| **Available** | `LINK.svg` exists in the repository |
+| **Qualified** | Geometry hash matches the contract's source reference |
+| **Active** | A renderer is producing output from this identity |
+
+A renderer can assert at load time:
+
+> "LINK identity v1.0 supports expressions [neutral, blocked, complete].
+> This contract version is compatible.
+> Rendering can proceed."
+
+A renderer can also discover incompatibility:
+
+> "LINK identity v2.0 introduces new geometry primitives.
+> This renderer was built against contract bounds from v1.0.
+> Rendering cannot proceed without requalification."
+
+This prevents the same drift pattern that the geometry invariant prevents:
+not just visual drift during rendering, but structural drift across identity
+versions. The SVG itself becomes a governed asset with the same lifecycle
+discipline as every other component in the platform.
