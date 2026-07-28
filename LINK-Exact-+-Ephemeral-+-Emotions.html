@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LINK — Exact + Ephemeral + Emotions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+#app{display:flex;flex-direction:column;min-height:100vh}
+@media(min-width:1024px){#app{flex-direction:row}}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#1e2935;border-radius:3px}
+::selection{background:rgba(0,229,255,0.3)}
+
+/* Preview panel */
+.preview{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:1rem;gap:1rem}
+@media(min-width:1024px){.preview{justify-content:center;padding:2rem}}
+.preview-header{width:100%;max-width:560px;display:flex;align-items:center;justify-content:space-between}
+.preview-header h1{font-size:13px;letter-spacing:.18em;font-weight:600;text-transform:uppercase;color:#e4e4e7}
+.status-badge{display:flex;align-items:center;gap:6px;font-size:10px;color:#71717a;font-family:'JetBrains Mono',monospace}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#00e5ff;transition:background .35s}
+.status-dot.pulse{animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* Canvas card */
+.canvas-card{position:relative;background:#0e151a;border-radius:20px;border:1px solid rgba(255,255,255,.06);padding:12px;box-shadow:0 0 0 1px rgba(255,255,255,.03),0 20px 80px -20px rgba(0,229,255,.25)}
+@media(min-width:640px){.canvas-card{padding:16px}}
+.canvas-wrap{position:relative;width:360px;height:360px;background:#0a0e12;border-radius:16px;overflow:hidden}
+@media(min-width:640px){.canvas-wrap{width:400px;height:400px}}
+.canvas-wrap svg{display:block;width:100%;height:100%}
+
+.canvas-badges{position:absolute;top:12px;left:12px;display:flex;gap:6px;pointer-events:none}
+.canvas-badge{padding:4px 10px;border-radius:999px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.1);font-size:10px;letter-spacing:.12em;text-transform:uppercase;backdrop-filter:blur(4px)}
+.badge-energy{color:#9cd4ff}
+.badge-mode{color:#a1a1aa}
+.canvas-stats{position:absolute;right:12px;bottom:12px;font-size:10px;color:#71717a;font-family:'JetBrains Mono',monospace;pointer-events:none;text-align:right}
+
+.canvas-footer{display:flex;align-items:center;justify-content:space-between;margin-top:12px;font-size:11px;color:#71717a;font-family:'JetBrains Mono',monospace}
+
+/* Mobile quick buttons */
+.mobile-actions{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;width:100%;max-width:400px}
+@media(min-width:1024px){.mobile-actions{display:none}}
+.mobile-btn{height:36px;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:#e4e4e7;font-size:11px;font-family:'Inter',sans-serif;cursor:pointer;transition:all .15s}
+.mobile-btn:hover{background:rgba(255,255,255,.1)}
+.mobile-btn.active{background:rgba(0,229,255,.2);border-color:rgba(0,229,255,.3);color:#67e8f9}
+
+/* Controls sidebar */
+.controls{width:100%;border-top:1px solid rgba(255,255,255,.06);background:#0d1317;display:flex;flex-direction:column}
+@media(min-width:1024px){.controls{width:380px;border-top:none;border-left:1px solid rgba(255,255,255,.06)}}
+.controls-header{padding:20px;border-bottom:1px solid rgba(255,255,255,.06)}
+.controls-header .label{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#71717a}
+.controls-header .sub{font-size:13px;color:#d4d4d8;margin-top:4px}
+.controls-scroll{flex:1;overflow-y:auto;padding:20px}
+.controls-scroll>section{margin-bottom:28px}
+.controls-scroll>section:last-child{margin-bottom:4px}
+
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.section-title{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#a1a1aa;font-weight:500}
+.section-sub{font-size:10px;color:#52525b}
+
+/* Button groups */
+.btn-group{display:flex;gap:8px;flex-wrap:wrap}
+.btn-group-2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn-group-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.btn-group-5{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.btn-group-6{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+
+.btn{border-radius:999px;padding:8px 14px;font-size:12px;font-family:'Inter',sans-serif;font-weight:500;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#d4d4d8;cursor:pointer;transition:all .15s;text-align:center;white-space:nowrap}
+.btn:hover{background:rgba(255,255,255,.1)}
+.btn-active{background:#fff;color:#09090b;border-color:#fff}
+.btn-sm{padding:6px 10px;font-size:11px}
+.btn-xs{padding:5px 8px;font-size:10px}
+
+/* State color buttons */
+.state-btn{display:flex;align-items:center;gap:6px;height:32px;border-radius:999px;padding:0 12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#a1a1aa;font-size:11px;font-family:'Inter',sans-serif;cursor:pointer;transition:all .15s;white-space:nowrap}
+.state-btn:hover{border-color:rgba(255,255,255,.2)}
+.state-btn.active{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);color:#e4e4e7}
+.state-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* Emotion buttons */
+.emotion-btn{height:36px;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:#d4d4d8;font-size:11px;font-family:'Inter',sans-serif;cursor:pointer;transition:all .15s}
+.emotion-btn:hover{background:rgba(255,255,255,.1)}
+.emotion-btn.active{background:#22d3ee;color:#09090b;border-color:#22d3ee}
+
+/* Checkbox rows */
+.check-row{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);cursor:pointer;transition:all .15s}
+.check-row:hover{border-color:rgba(255,255,255,.12)}
+.check-row input[type=checkbox]{accent-color:#22d3ee;width:16px;height:16px;cursor:pointer}
+.check-row .check-label{font-size:12px;color:#d4d4d8;flex:1}
+.check-row .check-desc{font-size:10px;color:#52525b}
+.check-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:#22d3ee}
+
+/* Sliders */
+.slider-group{margin-bottom:12px}
+.slider-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.slider-label{font-size:11px;color:#a1a1aa}
+.slider-value{font-size:11px;font-family:'JetBrains Mono',monospace;color:#52525b}
+.slider-group input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;background:#1e2935;border-radius:999px;outline:none;transition:background .15s}
+.slider-group input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#00e5ff;border:2px solid #0a0e12;box-shadow:0 0 8px rgba(0,229,255,.6);cursor:pointer}
+.slider-group input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:#00e5ff;border:2px solid #0a0e12;box-shadow:0 0 8px rgba(0,229,255,.6);cursor:pointer}
+
+/* Effects row */
+.effects-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+
+/* Small description text */
+.desc{font-size:10px;color:#52525b;line-height:1.5;margin-top:4px}
+.desc-mono{font-size:10px;color:#3f3f46;font-family:'JetBrains Mono',monospace;line-height:1.6;padding-top:12px;border-top:1px solid rgba(255,255,255,.05)}
+
+/* Glow slider special */
+.glow-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.glow-row input[type=range]{flex:1}
+.glow-row .slider-value{flex-shrink:0;width:32px;text-align:right}
+.glow-label{display:flex;align-items:center;gap:6px}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- Preview Panel -->
+<div class="preview">
+  <div class="preview-header">
+    <h1>LINK — Exact + Ephemeral + Emotions</h1>
+    <div class="status-badge">
+      <span class="status-dot" id="statusDot"></span>
+      <span>400×400 EXACT</span>
+    </div>
+  </div>
+
+  <div class="canvas-card">
+    <div class="canvas-wrap">
+      <svg id="linkSvg" viewBox="0 0 400 400" width="400" height="400">
+        <defs>
+          <!-- Glow filter for solid mode -->
+          <filter id="glowSolid" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur id="glowSolidBlur" in="SourceAlpha" stdDeviation="3.52" result="blur"/>
+            <feFlood id="glowSolidFlood" flood-color="#00E5FF" flood-opacity="0.56" result="color"/>
+            <feComposite in="color" in2="blur" operator="in" result="glow"/>
+            <feMerge>
+              <feMergeNode in="glow"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+          <!-- Ephemeral glow filter -->
+          <filter id="glowEphemeral" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="6.34" result="blur1"/>
+            <feGaussianBlur id="glowEphInnerBlur" in="SourceAlpha" stdDeviation="3.52" result="blur2"/>
+            <feFlood id="glowEphFlood1" flood-color="#00E5FF" flood-opacity="0.88" result="cyan"/>
+            <feComposite in="cyan" in2="blur1" operator="in" result="outerGlow"/>
+            <feFlood id="glowEphFlood2" flood-color="#00E5FF" flood-opacity="0.56" result="stateGlow"/>
+            <feComposite in="stateGlow" in2="blur2" operator="in" result="innerGlow"/>
+            <feMerge>
+              <feMergeNode in="outerGlow"/>
+              <feMergeNode in="innerGlow"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+          <!-- Fluid displacement -->
+          <filter id="fluidFilter" x="-20%" y="-20%" width="140%" height="140%">
+            <feTurbulence baseFrequency="0.018 0.034" numOctaves="3" seed="0" type="fractalNoise" result="turb"/>
+            <feDisplacementMap in="SourceGraphic" in2="turb" scale="18" xChannelSelector="R" yChannelSelector="G"/>
+            <feGaussianBlur stdDeviation="0.6"/>
+          </filter>
+          <!-- Gradients -->
+          <radialGradient id="fluidGrad" cx="0.5" cy="0.4" r="0.8">
+            <stop offset="0%" stop-color="#00E5FF" stop-opacity="0.9"/>
+            <stop offset="35%" stop-color="#00E5FF" stop-opacity="0.6"/>
+            <stop offset="75%" stop-color="#164450" stop-opacity="0.8"/>
+            <stop offset="100%" stop-color="#0b2228" stop-opacity="1"/>
+          </radialGradient>
+          <linearGradient id="cloudGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#00E5FF" stop-opacity="0.18"/>
+            <stop offset="100%" stop-color="#164450" stop-opacity="0.05"/>
+          </linearGradient>
+          <!-- Owl silhouette clip -->
+          <clipPath id="owlSilhouette">
+            <ellipse cx="207.81244" cy="207.07414" rx="174.08565" ry="120.15359"/>
+            <ellipse cx="330.18011" cy="235.67995" rx="58.59193" ry="60.892315"/>
+            <ellipse cx="82.177795" cy="233.71455" rx="58.59193" ry="60.892315"/>
+            <path d="m 157.67124,317.44149 c 52.95809,59.80496 48.45102,40.23242 48.45102,40.23242 0,0 -50.70456,44.5819 0,0 50.70457,-44.58188 36.05657,-41.31978 36.05657,-41.31978 z"/>
+            <path d="M 129.50204,84.745849 C 57.388899,33.639798 21.332323,35.814523 21.332323,35.814523 l 4.50707,53.280776 c 0,0 -10.14091,15.223081 15.77475,29.358801 25.915666,14.13571 176.902567,40.23242 163.381357,36.97033 -13.52122,-3.26209 -75.49346,-70.678581 -75.49346,-70.678581 z"/>
+            <path d="m 275.41158,83.206889 c 61.75705,-51.106048 92.63558,-48.931323 92.63558,-48.931323 l -3.85983,53.280773 c 0,0 8.68461,15.223081 -13.50935,29.358801 -22.19395,14.13571 -151.49776,40.23242 -139.91832,36.97033 11.57945,-3.26209 64.65192,-70.678581 64.65192,-70.678581 z"/>
+            <path d="m 120.48791,84.897029 c 86.76112,-18.475549 162.25458,5.27873 162.25458,5.27873 L 199.36165,226.10302 Z"/>
+          </clipPath>
+        </defs>
+
+        <!-- Background -->
+        <rect width="400" height="400" fill="#0A0E12"/>
+
+        <!-- Energy field layer -->
+        <g id="energyField" opacity="0.95" stroke="#00E5FF">
+          <!-- Ambient field rings -->
+          <g stroke-width="1" fill="none">
+            <ellipse id="ring1" cx="207.8" cy="207" rx="201.58" ry="141.96" stroke-opacity="0.18"/>
+            <ellipse id="ring2" cx="207.8" cy="207" rx="239.41" ry="166.89" stroke-opacity="0.14" stroke-dasharray="6 10"/>
+            <ellipse id="ring3" cx="207.8" cy="207" rx="291.85" ry="201.8" stroke-opacity="0.1"/>
+          </g>
+          <!-- Particles -->
+          <g id="particles" fill="#00E5FF">
+            <circle cx="367.17" cy="126.32" r="2.2" opacity="0.42"/>
+            <circle cx="429.51" cy="234.27" r="1.4" opacity="0.63"/>
+            <circle cx="354.75" cy="354.11" r="2.2" opacity="0.91"/>
+            <circle cx="174.57" cy="344.95" r="1.4" opacity="0.99"/>
+            <circle cx="23.92" cy="299.20" r="2.2" opacity="0.81"/>
+            <circle cx="-43.47" cy="176.32" r="1.4" opacity="0.52"/>
+            <circle cx="95.43" cy="92.58" r="2.2" opacity="0.40"/>
+            <circle cx="246.14" cy="49.34" r="1.4" opacity="0.55"/>
+          </g>
+        </g>
+
+        <!-- Owl group (animated) -->
+        <g id="owlGroup" filter="url(#glowSolid)">
+          <g id="owlScale">
+            <ellipse id="face" cx="207.81244" cy="207.07414" rx="174.08565" ry="120.15359" fill="#164450" stroke="none"/>
+            <ellipse id="rightCheek" cx="330.18011" cy="235.67995" rx="58.59193" ry="60.892315" fill="#164450" stroke="none"/>
+            <ellipse id="leftCheek" cx="82.177795" cy="233.71455" rx="58.59193" ry="60.892315" fill="#164450" stroke="none"/>
+            <path id="chin" d="m 157.67124,317.44149 c 52.95809,59.80496 48.45102,40.23242 48.45102,40.23242 0,0 -50.70456,44.5819 0,0 50.70457,-44.58188 36.05657,-41.31978 36.05657,-41.31978 z" fill="#164450" stroke="none"/>
+
+            <!-- Left horn -->
+            <g id="leftHornGroup">
+              <path id="leftHorn" d="M 129.50204,84.745849 C 57.388899,33.639798 21.332323,35.814523 21.332323,35.814523 l 4.50707,53.280776 c 0,0 -10.14091,15.223081 15.77475,29.358801 25.915666,14.13571 176.902567,40.23242 163.381357,36.97033 -13.52122,-3.26209 -75.49346,-70.678581 -75.49346,-70.678581 z" fill="#0b2228" stroke="none"/>
+            </g>
+            <!-- Right horn -->
+            <g id="rightHornGroup">
+              <path id="rightHorn" d="m 275.41158,83.206889 c 61.75705,-51.106048 92.63558,-48.931323 92.63558,-48.931323 l -3.85983,53.280773 c 0,0 8.68461,15.223081 -13.50935,29.358801 -22.19395,14.13571 -151.49776,40.23242 -139.91832,36.97033 11.57945,-3.26209 64.65192,-70.678581 64.65192,-70.678581 z" fill="#0b2228" stroke="none"/>
+            </g>
+
+            <!-- Right eye -->
+            <g id="rightEyeGroup">
+              <ellipse id="rightEye" cx="270.83963" cy="208.43449" rx="60.84547" ry="59.804955" fill="#53676c" stroke="none"/>
+            </g>
+            <!-- Right pupil -->
+            <g id="rightPupilGroup">
+              <ellipse id="rightPupil" cx="270.70145" cy="217.88528" rx="21.408592" ry="20.116211" fill="#dbe2e3" stroke="none"/>
+            </g>
+            <!-- Left eye -->
+            <g id="leftEyeGroup">
+              <ellipse id="leftEye" cx="140.76973" cy="204.35574" rx="60.84547" ry="59.804955" fill="#53676c" stroke="none"/>
+            </g>
+            <!-- Left pupil -->
+            <g id="leftPupilGroup">
+              <ellipse id="leftPupil" cx="143.02325" cy="214.6857" rx="22.53536" ry="19.028851" fill="#dbe2e3" stroke="none"/>
+            </g>
+
+            <!-- Widow's peak (rendered last, above eyes) -->
+            <g id="peakGroup">
+              <path id="widowsPeak" d="m 120.48791,84.897029 c 86.76112,-18.475549 162.25458,5.27873 162.25458,5.27873 L 199.36165,226.10302 Z" fill="#0b2228" stroke="none"/>
+            </g>
+          </g>
+        </g>
+      </svg>
+
+      <!-- Canvas badges -->
+      <div class="canvas-badges">
+        <div class="canvas-badge badge-energy" id="badgeEnergy">energy • Idle</div>
+        <div class="canvas-badge badge-mode" id="badgeMode">solid</div>
+      </div>
+      <div class="canvas-stats" id="canvasStats">peak ABOVE eyes ✓ | glow 1.6 | neutral</div>
+    </div>
+    <div class="canvas-footer">
+      <span id="colorInfo">face #164450 • eyes #53676c • horns/peak #0b2228 • glow #00E5FF</span>
+      <span id="flyPercent">0% fly</span>
+    </div>
+  </div>
+
+  <!-- Mobile quick actions -->
+  <div class="mobile-actions" id="mobileActions">
+    <button class="mobile-btn" data-mobile="blink">Blink</button>
+    <button class="mobile-btn" data-mobile="wleft">W-Left</button>
+    <button class="mobile-btn" data-mobile="wright">W-Right</button>
+    <button class="mobile-btn active" data-mobile="breath">Breath</button>
+    <button class="mobile-btn" data-mobile="mode">Mode</button>
+  </div>
+</div>
+
+<!-- Controls Sidebar -->
+<div class="controls">
+  <div class="controls-header">
+    <div class="label">Controls</div>
+    <div class="sub">Exact SVG preserved • Peak above eyes • Ephemeral ghost</div>
+  </div>
+  <div class="controls-scroll">
+
+    <!-- Version -->
+    <section>
+      <div class="section-header">
+        <span class="section-title">Version</span>
+        <span class="section-sub">Solid vs Ephemeral</span>
+      </div>
+      <div class="btn-group-2">
+        <button class="btn btn-active" data-version="solid">Solid — Opacity 1.0</button>
+        <button class="btn" data-version="ephemeral">Ephemeral — Ghostly</button>
+      </div>
+    </section>
+
+    <!-- Layer -->
+    <section>
+      <div class="section-title" style="margin-bottom:10px">Layer</div>
+      <label class="check-row">
+        <input type="checkbox" id="layerCheck" checked>
+        <div class="check-label">
+          <div>Widow's peak above eyes (fixed)</div>
+          <div class="check-desc">Order: face, cheeks, chin, horns, eyes, pupils, THEN peak on top</div>
+        </div>
+        <span class="check-dot"></span>
+      </label>
+    </section>
+
+    <!-- Modes -->
+    <section>
+      <div class="section-title" style="margin-bottom:10px">Modes — Shared by both versions</div>
+      <div class="btn-group-3">
+        <button class="btn btn-active" data-mode="field">Energy Field</button>
+        <button class="btn" data-mode="fluid">Fluid Inside</button>
+        <button class="btn" data-mode="order">Order Emerging</button>
+      </div>
+      <div class="desc" id="modeDesc">Crisp owl core + 3 field rings breathing outside, cyan glow, particles orbiting.</div>
+    </section>
+
+    <!-- States / Field Colors -->
+    <section>
+      <div class="section-title" style="margin-bottom:10px">States — Field Color</div>
+      <div class="btn-group-3" id="stateButtons">
+        <button class="state-btn active" data-state="idle"><span class="state-dot" style="background:#00E5FF"></span>Idle</button>
+        <button class="state-btn" data-state="listening"><span class="state-dot" style="background:#00FF9D"></span>Listening</button>
+        <button class="state-btn" data-state="thinking"><span class="state-dot" style="background:#FFB800"></span>Thinking</button>
+        <button class="state-btn" data-state="tool"><span class="state-dot" style="background:#FF5A5A"></span>Tool</button>
+        <button class="state-btn" data-state="speaking"><span class="state-dot" style="background:#A78BFA"></span>Speaking</button>
+        <button class="state-btn" data-state="complete"><span class="state-dot" style="background:#4ADE80"></span>Complete</button>
+      </div>
+    </section>
+
+    <!-- Emotion Triggers -->
+    <section>
+      <div class="section-title" style="margin-bottom:10px">Emotions</div>
+      <div class="btn-group-3" style="margin-bottom:8px">
+        <button class="emotion-btn" data-trigger="blink">Blink</button>
+        <button class="emotion-btn" data-trigger="winkLeft">Wink Left</button>
+        <button class="emotion-btn" data-trigger="winkRight">Wink Right</button>
+      </div>
+      <div class="btn-group-2">
+        <label class="check-row" style="padding:8px 10px">
+          <input type="checkbox" id="breathingCheck" checked>
+          <span class="check-label" style="font-size:11px">Breathing 0.98-1.02 /2s</span>
+        </label>
+        <label class="check-row" style="padding:8px 10px">
+          <input type="checkbox" id="autoBlinkCheck" checked>
+          <span class="check-label" style="font-size:11px">Auto Blink 3-5s</span>
+        </label>
+      </div>
+    </section>
+
+    <!-- Emotion States -->
+    <section>
+      <div class="section-title" style="margin-bottom:6px">Emotion States</div>
+      <div id="emotionStateButtons" class="btn-group-6">
+        <button class="emotion-btn active" data-emotion="neutral">neutral</button>
+        <button class="emotion-btn" data-emotion="sleepy">sleepy</button>
+        <button class="emotion-btn" data-emotion="alert">alert</button>
+        <button class="emotion-btn" data-emotion="curious">curious</button>
+        <button class="emotion-btn" data-emotion="angry">angry</button>
+        <button class="emotion-btn" data-emotion="happy">happy</button>
+      </div>
+      <div class="desc">Sleepy: eyes scaleY 0.4 pupils down • Alert: scaleY 1.2 horns up • Curious: one horn up + 3° tilt • Angry: squint 0.6 peak down pupils small • Happy: soft eyes cheeks up</div>
+    </section>
+
+    <!-- Effects -->
+    <section>
+      <div class="section-title" style="margin-bottom:14px">Effects</div>
+
+      <!-- Fly -->
+      <div class="slider-group">
+        <div class="slider-header">
+          <span class="slider-label">Fly 0–100%</span>
+          <span class="slider-value" id="flyValue">0%</span>
+        </div>
+        <input type="range" id="flySlider" min="0" max="100" value="0">
+        <div class="effects-row">
+          <button class="btn btn-sm" data-action="flyIn">Fly-In</button>
+          <button class="btn btn-sm" data-action="flyOut">Fly-Out</button>
+        </div>
+      </div>
+
+      <!-- Glow -->
+      <div class="slider-group">
+        <div class="glow-row">
+          <label class="glow-label" style="font-size:11px;color:#a1a1aa">
+            <input type="checkbox" id="glowCheck" checked>
+            Glow
+          </label>
+          <input type="range" id="glowSlider" min="0.2" max="3" step="0.1" value="1.6">
+          <span class="slider-value" id="glowValue">1.6</span>
+        </div>
+        <div class="desc">Solid normal glow</div>
+      </div>
+
+      <!-- Wireframe + Transparency -->
+      <div class="effects-row" style="margin-bottom:12px">
+        <label class="check-row" style="padding:8px 10px">
+          <input type="checkbox" id="wireframeCheck">
+          <span class="check-label" style="font-size:11px">Wireframe</span>
+        </label>
+        <div class="slider-group" style="margin-bottom:0">
+          <div class="slider-header">
+            <span class="slider-label">Transparency</span>
+            <span class="slider-value" id="transparencyValue">1.00</span>
+          </div>
+          <input type="range" id="transparencySlider" min="0.2" max="1" step="0.01" value="1">
+        </div>
+      </div>
+
+      <!-- IDs reference -->
+      <div class="desc-mono">IDs: face, right-cheek, left-cheek, chin, right-eye, right-pupil, left-eye, left-pupil, left-horn, right-horn, widows-peak — fills #164450 #53676c #dbe2e3 #0b2228 exact. Horns+peak same #0b2228 in both versions.</div>
+    </section>
+
+  </div>
+</div>
+
+</div><!-- /app -->
+
+<script>
+(function() {
+  'use strict';
+
+  // ---- State ----
+  const state = {
+    version: 'solid',       // 'solid' | 'ephemeral'
+    mode: 'field',          // 'field' | 'fluid' | 'order'
+    fieldState: 'idle',     // 'idle' | 'listening' | 'thinking' | 'tool' | 'speaking' | 'complete'
+    emotion: 'neutral',     // 'neutral' | 'sleepy' | 'alert' | 'curious' | 'angry' | 'happy'
+    breathing: true,
+    autoBlink: true,
+    glowOn: true,
+    glowIntensity: 1.6,
+    flyPercent: 0,
+    transparency: 1.0,
+    wireframe: false,
+    peakAboveEyes: true,
+  };
+
+  // Field state colors
+  const FIELD_COLORS = {
+    idle:     '#00E5FF',
+    listening:'#00FF9D',
+    thinking: '#FFB800',
+    tool:     '#FF5A5A',
+    speaking: '#A78BFA',
+    complete: '#4ADE80',
+  };
+
+  // ---- DOM refs ----
+  const svg = document.getElementById('linkSvg');
+  const owlGroup = document.getElementById('owlGroup');
+  const owlScale = document.getElementById('owlScale');
+  const energyField = document.getElementById('energyField');
+  const particles = document.getElementById('particles');
+  const ring1 = document.getElementById('ring1');
+  const ring2 = document.getElementById('ring2');
+  const ring3 = document.getElementById('ring3');
+
+  const glowFilter = document.getElementById('glowSolid');
+  const glowBlur = document.getElementById('glowSolidBlur');
+  const glowFlood = document.getElementById('glowSolidFlood');
+  const glowEphFilter = document.getElementById('glowEphemeral');
+
+  // Eye / pupil groups
+  const leftEyeGroup = document.getElementById('leftEyeGroup');
+  const rightEyeGroup = document.getElementById('rightEyeGroup');
+  const leftPupilGroup = document.getElementById('leftPupilGroup');
+  const rightPupilGroup = document.getElementById('rightPupilGroup');
+  const leftHornGroup = document.getElementById('leftHornGroup');
+  const rightHornGroup = document.getElementById('rightHornGroup');
+  const peakGroup = document.getElementById('peakGroup');
+
+  // Badges
+  const badgeEnergy = document.getElementById('badgeEnergy');
+  const badgeMode = document.getElementById('badgeMode');
+  const canvasStats = document.getElementById('canvasStats');
+  const colorInfo = document.getElementById('colorInfo');
+  const flyPercent = document.getElementById('flyPercent');
+  const statusDot = document.getElementById('statusDot');
+
+  // Mode description
+  const modeDesc = document.getElementById('modeDesc');
+
+  // ---- Helpers ----
+  function setAttr(el, attr, val) {
+    if (el) el.setAttribute(attr, val);
+  }
+  function setStyle(el, prop, val) {
+    if (el) el.style[prop] = val;
+  }
+
+  // ---- Apply field color ----
+  function applyFieldColor(color) {
+    const solid = '#00E5FF'; // default cyan
+    const c = color || FIELD_COLORS[state.fieldState] || solid;
+
+    // Energy field stroke/fill
+    setAttr(energyField, 'stroke', c);
+    if (particles) particles.setAttribute('fill', c);
+
+    // Glow filter flood colors
+    const flood1 = glowFlood;
+    const eph1 = document.getElementById('glowEphFlood1');
+    const eph2 = document.getElementById('glowEphFlood2');
+    if (flood1) setAttr(flood1, 'flood-color', c);
+    if (eph1) setAttr(eph1, 'flood-color', c);
+    if (eph2) setAttr(eph2, 'flood-color', c);
+
+    // Fluid gradient
+    const fluidGrad = document.getElementById('fluidGrad');
+    if (fluidGrad) {
+      const stops = fluidGrad.querySelectorAll('stop');
+      if (stops.length >= 3) {
+        stops[0].setAttribute('stop-color', c);
+        stops[1].setAttribute('stop-color', c);
+      }
+    }
+
+    // Status dot
+    if (statusDot) statusDot.style.background = c;
+
+    // Badge
+    if (badgeEnergy) {
+      badgeEnergy.textContent = 'energy • ' + state.fieldState.charAt(0).toUpperCase() + state.fieldState.slice(1);
+    }
+  }
+
+  // ---- Apply mode (field / fluid / order) ----
+  function applyMode() {
+    const m = state.mode;
+
+    // Reset field visibility
+    energyField.style.display = '';
+    energyField.style.opacity = '0.95';
+    owlGroup.style.filter = state.version === 'ephemeral' ? 'url(#glowEphemeral)' : 'url(#glowSolid)';
+    
+    // Remove fluid/order classes from owl
+    owlGroup.style.filter = state.version === 'ephemeral' ? 'url(#glowEphemeral)' : 'url(#glowSolid)';
+
+    if (m === 'field') {
+      // Default: crisp owl + field rings + particles
+      modeDesc.textContent = 'Crisp owl core + 3 field rings breathing outside, cyan glow, particles orbiting.';
+      owlGroup.style.filter = state.version === 'ephemeral' ? 'url(#glowEphemeral)' : 'url(#glowSolid)';
+      energyField.style.display = '';
+    } else if (m === 'fluid') {
+      // Fluid: displacement map on field
+      modeDesc.textContent = 'Fluid organic distortion inside the owl silhouette — turbulence warps the energy field, owl stays sharp.';
+      // Add fluid filter to energy field group
+      energyField.style.filter = 'url(#fluidFilter)';
+      energyField.style.display = '';
+      // Fill field with gradient
+      energyField.style.background = '';
+    } else if (m === 'order') {
+      // Order emerging: particles align
+      modeDesc.textContent = 'Chaos to order — particles spiral inward and sync into a coherent ring formation around the owl.';
+      energyField.style.filter = '';
+      energyField.style.display = '';
+    }
+
+    // Update mode buttons
+    document.querySelectorAll('[data-mode]').forEach(b => {
+      b.classList.toggle('btn-active', b.dataset.mode === m);
+    });
+  }
+
+  // ---- Apply version (solid / ephemeral) ----
+  function applyVersion() {
+    const v = state.version;
+    const isEph = v === 'ephemeral';
+
+    owlGroup.style.filter = isEph ? 'url(#glowEphemeral)' : 'url(#glowSolid)';
+    owlGroup.style.opacity = isEph ? state.transparency : state.transparency;
+
+    // Bigger glow for ephemeral
+    const blur = glowBlur;
+    if (blur) {
+      setAttr(blur, 'stdDeviation', isEph ? String(state.glowIntensity * 2.2) : String(state.glowIntensity * 2.2 * 0.6));
+    }
+
+    // Badge
+    if (badgeMode) badgeMode.textContent = isEph ? 'ephemeral' : 'solid';
+
+    // Ephemeral description
+    const ephInner = document.getElementById('glowEphInnerBlur');
+    if (ephInner) {
+      setAttr(ephInner, 'stdDeviation', String(state.glowIntensity * 2.2));
+    }
+
+    document.querySelectorAll('[data-version]').forEach(b => {
+      b.classList.toggle('btn-active', b.dataset.version === v);
+    });
+  }
+
+  // ---- Apply emotion state ----
+  function applyEmotion() {
+    const e = state.emotion;
+
+    // Reset all transforms on eye/pupil/horn groups
+    setStyle(leftEyeGroup, 'transform', '');
+    setStyle(rightEyeGroup, 'transform', '');
+    setStyle(leftPupilGroup, 'transform', '');
+    setStyle(rightPupilGroup, 'transform', '');
+    setStyle(leftHornGroup, 'transform', '');
+    setStyle(rightHornGroup, 'transform', '');
+    setStyle(peakGroup, 'transform', '');
+
+    // Reset pupil positions
+    setAttr(document.getElementById('leftPupil'), 'cx', '143.02325');
+    setAttr(document.getElementById('leftPupil'), 'cy', '214.6857');
+    setAttr(document.getElementById('rightPupil'), 'cx', '270.70145');
+    setAttr(document.getElementById('rightPupil'), 'cy', '217.88528');
+    setAttr(document.getElementById('leftPupil'), 'rx', '22.53536');
+    setAttr(document.getElementById('rightPupil'), 'rx', '21.408592');
+
+    const pupilScale = 1;
+    const eyeScaleY = 1;
+
+    switch (e) {
+      case 'neutral':
+        // Default - nothing to change
+        break;
+      case 'sleepy':
+        setStyle(leftEyeGroup, 'transform', 'scaleY(0.4)');
+        setStyle(rightEyeGroup, 'transform', 'scaleY(0.4)');
+        setStyle(leftPupilGroup, 'transform', 'translateY(8px)');
+        setStyle(rightPupilGroup, 'transform', 'translateY(8px)');
+        break;
+      case 'alert':
+        setStyle(leftEyeGroup, 'transform', 'scaleY(1.2)');
+        setStyle(rightEyeGroup, 'transform', 'scaleY(1.2)');
+        setStyle(leftHornGroup, 'transform', 'translateY(-6px)');
+        setStyle(rightHornGroup, 'transform', 'translateY(-6px)');
+        break;
+      case 'curious':
+        setStyle(leftHornGroup, 'transform', 'translateY(-4px)');
+        setStyle(owlGroup, 'transform', 'rotate(3deg)');
+        // Will restore owlGroup rotation on next frame
+        setTimeout(() => {
+          if (state.emotion !== 'curious') return;
+        }, 50);
+        break;
+      case 'angry':
+        setStyle(leftEyeGroup, 'transform', 'scaleY(0.6)');
+        setStyle(rightEyeGroup, 'transform', 'scaleY(0.6)');
+        setAttr(document.getElementById('leftPupil'), 'rx', '14');
+        setAttr(document.getElementById('rightPupil'), 'rx', '13');
+        setStyle(peakGroup, 'transform', 'translateY(4px)');
+        break;
+      case 'happy':
+        setStyle(leftEyeGroup, 'transform', 'scaleY(0.85)');
+        setStyle(rightEyeGroup, 'transform', 'scaleY(0.85)');
+        break;
+    }
+
+    // Update buttons
+    document.querySelectorAll('[data-emotion]').forEach(b => {
+      b.classList.toggle('active', b.dataset.emotion === e);
+    });
+
+    // Stats
+    updateStats();
+  }
+
+  // ---- Emotion triggers (temporary) ----
+  function triggerBlink() {
+    ['leftEyeGroup','rightEyeGroup'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.style.transition = 'transform 0.1s';
+      el.style.transform = 'scaleY(0.05)';
+      setTimeout(() => {
+        el.style.transition = 'transform 0.15s';
+        el.style.transform = '';
+      }, 120);
+    });
+  }
+
+  function triggerWink(side) {
+    const id = side === 'left' ? 'leftEyeGroup' : 'rightEyeGroup';
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.style.transition = 'transform 0.1s';
+    el.style.transform = 'scaleY(0.05)';
+    setTimeout(() => {
+      el.style.transition = 'transform 0.15s';
+      el.style.transform = '';
+    }, 200);
+  }
+
+  // ---- Stats ----
+  function updateStats() {
+    canvasStats.textContent = `peak ABOVE eyes ✓ | glow ${state.glowIntensity.toFixed(1)} | ${state.emotion}`;
+    flyPercent.textContent = `${state.flyPercent}% fly`;
+  }
+
+  // ---- Breathing animation ----
+  let breathAnimId = null;
+  let breathTime = 0;
+
+  function startBreathing() {
+    stopBreathing();
+    if (!state.breathing) return;
+    const period = 2000; // 2s
+    const minScale = 0.98;
+    const maxScale = 1.02;
+
+    function tick(timestamp) {
+      if (!state.breathing) { stopBreathing(); return; }
+      breathTime = (breathTime + 16) % period;
+      const phase = (breathTime / period) * Math.PI * 2;
+      const s = minScale + (maxScale - minScale) * (0.5 + 0.5 * Math.sin(phase - Math.PI / 2));
+      owlScale.style.transform = `translate(${(1 - s) * 100}px, ${(1 - s) * 120}px) scale(${s})`;
+      // Also rotate field
+      breathAnimId = requestAnimationFrame(tick);
+    }
+    breathAnimId = requestAnimationFrame(tick);
+  }
+
+  function stopBreathing() {
+    if (breathAnimId) { cancelAnimationFrame(breathAnimId); breathAnimId = null; }
+  }
+
+  // ---- Fly animation ----
+  function flyIn() {
+    let startVal = state.flyPercent;
+    const target = 100;
+    const duration = 600;
+    const startTime = performance.now();
+
+    function tick(now) {
+      const t = Math.min((now - startTime) / duration, 1);
+      const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+      const val = startVal + (target - startVal) * eased;
+      state.flyPercent = Math.round(val);
+      document.getElementById('flySlider').value = state.flyPercent;
+      document.getElementById('flyValue').textContent = state.flyPercent + '%';
+      flyPercent.textContent = state.flyPercent + '% fly';
+      applyFlyTransform(state.flyPercent);
+      if (t < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  function flyOut() {
+    let startVal = state.flyPercent;
+    const target = 0;
+    const duration = 600;
+    const startTime = performance.now();
+
+    function tick(now) {
+      const t = Math.min((now - startTime) / duration, 1);
+      const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+      const val = startVal + (target - startVal) * eased;
+      state.flyPercent = Math.round(val);
+      document.getElementById('flySlider').value = state.flyPercent;
+      document.getElementById('flyValue').textContent = state.flyPercent + '%';
+      flyPercent.textContent = state.flyPercent + '% fly';
+      applyFlyTransform(state.flyPercent);
+      if (t < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  function applyFlyTransform(pct) {
+    const scale = 1 - pct * 0.007;
+    const translateY = pct * 3;
+    owlScale.style.transform = `translate(0, ${translateY}px) scale(${Math.max(scale, 0.3)})`;
+  }
+
+  // ---- Wireframe ----
+  function applyWireframe() {
+    const isWf = state.wireframe;
+    document.querySelectorAll('#face, #rightCheek, #leftCheek, #chin, #leftHorn, #rightHorn, #widowsPeak, #leftEye, #rightEye').forEach(el => {
+      if (isWf) {
+        el.setAttribute('fill', 'none');
+        el.setAttribute('stroke', '#0b2228');
+        el.setAttribute('stroke-width', '1.2');
+      } else {
+        el.removeAttribute('stroke');
+        el.removeAttribute('stroke-width');
+        // Restore fills
+        const id = el.id;
+        if (id === 'face' || id === 'rightCheek' || id === 'leftCheek' || id === 'chin') el.setAttribute('fill', '#164450');
+        else if (id === 'leftHorn' || id === 'rightHorn' || id === 'widowsPeak') el.setAttribute('fill', '#0b2228');
+        else if (id === 'leftEye' || id === 'rightEye') el.setAttribute('fill', '#53676c');
+      }
+    });
+  }
+
+  // ---- Auto blink ----
+  let autoBlinkTimer = null;
+
+  function scheduleAutoBlink() {
+    clearTimeout(autoBlinkTimer);
+    if (!state.autoBlink) return;
+    const delay = 3000 + Math.random() * 2000; // 3-5s
+    autoBlinkTimer = setTimeout(() => {
+      triggerBlink();
+      scheduleAutoBlink();
+    }, delay);
+  }
+
+  // ---- Glow ----
+  function applyGlow() {
+    const g = state.glowIntensity;
+    const blur = glowBlur;
+    if (blur) {
+      const isEph = state.version === 'ephemeral';
+      setAttr(blur, 'stdDeviation', isEph ? String(g * 2.2) : String(g * 2.2 * 0.6));
+    }
+    // Toggle glow visibility — can't really turn off SVG filter, so we remove it
+    if (state.glowOn) {
+      owlGroup.style.filter = state.version === 'ephemeral' ? 'url(#glowEphemeral)' : 'url(#glowSolid)';
+    } else {
+      owlGroup.style.filter = 'none';
+    }
+    document.getElementById('glowValue').textContent = g.toFixed(1);
+    updateStats();
+  }
+
+  // ---- Transparency ----
+  function applyTransparency() {
+    owlGroup.style.opacity = state.transparency;
+    document.getElementById('transparencyValue').textContent = state.transparency.toFixed(2);
+  }
+
+  // ---- Init ----
+  function init() {
+    applyFieldColor(FIELD_COLORS.idle);
+    applyMode();
+    applyVersion();
+    applyEmotion();
+    applyGlow();
+    applyTransparency();
+    updateStats();
+    if (state.breathing) startBreathing();
+    if (state.autoBlink) scheduleAutoBlink();
+  }
+
+  // ---- Event Binding ----
+
+  // Version buttons
+  document.querySelectorAll('[data-version]').forEach(btn => {
+    btn.addEventListener('click', function() {
+      state.version = this.dataset.version;
+      applyVersion();
+      applyGlow();
+    });
+  });
+
+  // Mode buttons
+  document.querySelectorAll('[data-mode]').forEach(btn => {
+    btn.addEventListener('click', function() {
+      state.mode = this.dataset.mode;
+      applyMode();
+    });
+  });
+
+  // State buttons
+  document.querySelectorAll('[data-state]').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const st = this.dataset.state;
+      state.fieldState = st;
+      document.querySelectorAll('[data-state]').forEach(b => b.classList.toggle('active', b.dataset.state === st));
+      applyFieldColor(FIELD_COLORS[st]);
+    });
+  });
+
+  // Emotion triggers
+  document.querySelectorAll('[data-trigger]').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const t = this.dataset.trigger;
+      if (t === 'blink') triggerBlink();
+      else if (t === 'winkLeft') triggerWink('left');
+      else if (t === 'winkRight') triggerWink('right');
+    });
+  });
+
+  // Emotion states
+  document.querySelectorAll('[data-emotion]').forEach(btn => {
+    btn.addEventListener('click', function() {
+      state.emotion = this.dataset.emotion;
+      // Reapply owlGroup rotation for curious
+      owlGroup.style.transform = '';
+      applyEmotion();
+    });
+  });
+
+  // Mobile buttons
+  document.querySelectorAll('[data-mobile]').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const a = this.dataset.mobile;
+      if (a === 'blink') triggerBlink();
+      else if (a === 'wleft') triggerWink('left');
+      else if (a === 'wright') triggerWink('right');
+      else if (a === 'breath') {
+        state.breathing = !state.breathing;
+        this.classList.toggle('active');
+        document.getElementById('breathingCheck').checked = state.breathing;
+        if (state.breathing) startBreathing(); else stopBreathing();
+      }
+      else if (a === 'mode') {
+        // Cycle through modes
+        const modes = ['field', 'fluid', 'order'];
+        const idx = modes.indexOf(state.mode);
+        state.mode = modes[(idx + 1) % modes.length];
+        applyMode();
+      }
+    });
+  });
+
+  // Breathing checkbox
+  document.getElementById('breathingCheck').addEventListener('change', function() {
+    state.breathing = this.checked;
+    const mb = document.querySelector('[data-mobile="breath"]');
+    if (mb) mb.classList.toggle('active', state.breathing);
+    if (state.breathing) startBreathing(); else stopBreathing();
+  });
+
+  // Auto blink checkbox
+  document.getElementById('autoBlinkCheck').addEventListener('change', function() {
+    state.autoBlink = this.checked;
+    if (state.autoBlink) scheduleAutoBlink(); else clearTimeout(autoBlinkTimer);
+  });
+
+  // Layer checkbox
+  document.getElementById('layerCheck').addEventListener('change', function() {
+    state.peakAboveEyes = this.checked;
+    // Widow's peak is already the last element in the owl, so visibility toggle
+    peakGroup.style.display = state.peakAboveEyes ? '' : 'none';
+  });
+
+  // Fly slider
+  document.getElementById('flySlider').addEventListener('input', function() {
+    state.flyPercent = parseInt(this.value);
+    document.getElementById('flyValue').textContent = state.flyPercent + '%';
+    flyPercent.textContent = state.flyPercent + '% fly';
+    applyFlyTransform(state.flyPercent);
+  });
+
+  // Fly buttons
+  document.querySelector('[data-action="flyIn"]').addEventListener('click', flyIn);
+  document.querySelector('[data-action="flyOut"]').addEventListener('click', flyOut);
+
+  // Glow checkbox
+  document.getElementById('glowCheck').addEventListener('change', function() {
+    state.glowOn = this.checked;
+    applyGlow();
+  });
+
+  // Glow slider
+  document.getElementById('glowSlider').addEventListener('input', function() {
+    state.glowIntensity = parseFloat(this.value);
+    applyGlow();
+  });
+
+  // Wireframe checkbox
+  document.getElementById('wireframeCheck').addEventListener('change', function() {
+    state.wireframe = this.checked;
+    applyWireframe();
+  });
+
+  // Transparency slider
+  document.getElementById('transparencySlider').addEventListener('input', function() {
+    state.transparency = parseFloat(this.value);
+    applyTransparency();
+  });
+
+  // ---- Go ----
+  init();
+})();
+</script>
+</body>
+</html>
