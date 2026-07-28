@@ -138,6 +138,12 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
             <stop offset="0%" stop-color="#00E5FF" stop-opacity="0.18"/>
             <stop offset="100%" stop-color="#164450" stop-opacity="0.05"/>
           </linearGradient>
+          <clipPath id="brainClip">
+            <ellipse cx="207.81244" cy="207.07414" rx="174.08565" ry="120.15359"/>
+            <ellipse cx="330.18011" cy="235.67995" rx="58.59193" ry="60.892315"/>
+            <ellipse cx="82.177795" cy="233.71455" rx="58.59193" ry="60.892315"/>
+            <path d="m 157.67124,317.44149 c 52.95809,59.80496 48.45102,40.23242 48.45102,40.23242 0,0 -50.70456,44.5819 0,0 50.70457,-44.58188 36.05657,-41.31978 36.05657,-41.31978 z"/>
+          </clipPath>
           <clipPath id="owlSilhouette">
             <ellipse cx="207.81244" cy="207.07414" rx="174.08565" ry="120.15359"/>
             <ellipse cx="330.18011" cy="235.67995" rx="58.59193" ry="60.892315"/>
@@ -161,9 +167,9 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
           <g id="particles" fill="#00E5FF"/>
         </g>
 
-        <!-- Fluid overlay (visible only in fluid mode) -->
-        <g id="fluidOverlay" display="none">
-          <rect width="400" height="400" fill="url(#fluidGrad)" filter="url(#fluidFilter)" opacity="0.45"/>
+          <!-- Fluid overlay (visible only in fluid mode, clipped to face area) -->
+        <g id="fluidOverlay" display="none" clip-path="url(#brainClip)">
+          <rect width="400" height="400" fill="url(#fluidGrad)" filter="url(#fluidFilter)" opacity="0.55"/>
         </g>
 
         <!-- Owl group -->
@@ -259,6 +265,10 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
         <button class="btn btn-active" data-mode="field">Energy Field</button>
         <button class="btn" data-mode="fluid">Fluid Inside</button>
         <button class="btn" data-mode="order">Order Emerging</button>
+      </div>
+      <div class="effects-row" style="margin-top:6px">
+        <button class="btn btn-sm" data-action="appear">Appear</button>
+        <button class="btn btn-sm" data-action="leave">Leave</button>
       </div>
       <div class="desc" id="modeDesc">Crisp owl core + 3 field rings breathing outside, cyan glow, particles orbiting.</div>
     </section>
@@ -495,6 +505,24 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
   // ── Apply field color ──
   function applyFieldColor(color) {
     const c = color || FIELD_COLORS[state.fieldState] || '#00E5FF';
+    // In fluid mode, only the fluid overlay changes color — LINK stays default
+    if (state.mode === 'fluid') {
+      const fluidGrad = document.getElementById('fluidGrad');
+      if (fluidGrad) {
+        const stops = fluidGrad.querySelectorAll('stop');
+        if (stops.length >= 3) {
+          stops[0].setAttribute('stop-color', c);
+          stops[1].setAttribute('stop-color', c);
+        }
+      }
+      if (statusDot) statusDot.style.background = c;
+      if (badgeEnergy) {
+        const label = state.fieldState.charAt(0).toUpperCase() + state.fieldState.slice(1);
+        badgeEnergy.textContent = 'energy • ' + label;
+      }
+      return;
+    }
+    // Non-fluid modes: change everything
     energyField.setAttribute('stroke', c);
     particles.setAttribute('fill', c);
     const f1 = document.getElementById('glowSolidFlood');
@@ -525,14 +553,17 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
     energyField.style.filter = 'none';
     fluidOverlay.setAttribute('display', 'none');
     owlGroup.style.display = '';
+    owlGroup.style.opacity = state.version === 'ephemeral' ? 0.55 * state.transparency : state.transparency;
 
     if (m === 'field') {
       modeDesc.textContent = 'Crisp owl core + 3 field rings breathing outside, cyan glow, particles orbiting.';
     } else if (m === 'fluid') {
-      modeDesc.textContent = 'Organic fluid distortion inside the owl silhouette — turbulence evolves continuously, color shifts with field state.';
+      modeDesc.textContent = 'Organic fluid distortion inside the owl head — turbulence evolves continuously, color shifts with field state. LINK stays in default colors.';
       fluidOverlay.removeAttribute('display');
+      // Re-apply field color for fluid mode only (updates gradient, not LINK)
+      applyFieldColor();
     } else if (m === 'order') {
-      modeDesc.textContent = 'Chaos to order — particles spiral inward as the owl emerges: eyes first, blink, horns, then face from the background.';
+      modeDesc.textContent = 'Chaos to order — particles spiral inward as the owl emerges: eyes first, blink, horns, then face resolves. Click again to replay or switch modes.';
       startOrderEmerging();
     }
 
@@ -549,76 +580,133 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
     if (orderAnimTimer) { clearTimeout(orderAnimTimer); orderAnimTimer = null; }
     orderAnimActive = true;
 
-    // Set all identity elements to transparent
-    const allParts = [owlGroup, leftEyeGroup, rightEyeGroup, leftPupilGroup, rightPupilGroup,
-                      leftHornGroup, rightHornGroup, leftCheekGroup, rightCheekGroup,
-                      peakGroup, document.getElementById('face'), document.getElementById('chin')];
-    // Hide owl
+    // Hide all identity elements
     owlGroup.style.display = 'none';
+    fluidOverlay.setAttribute('display', 'none');
 
-    // Phase 0: show field only, build anticipation
-    // Phase 1 (after 800ms): eyes fade in
+    // Phase 1 (200ms): show field only
     setTimeout(() => {
       owlGroup.style.display = '';
       owlGroup.style.opacity = '0';
-      leftEyeGroup.style.opacity = '0';
-      rightEyeGroup.style.opacity = '0';
-      leftPupilGroup.style.opacity = '0';
-      rightPupilGroup.style.opacity = '0';
-      leftHornGroup.style.opacity = '0';
-      rightHornGroup.style.opacity = '0';
-      leftCheekGroup.style.opacity = '0';
-      rightCheekGroup.style.opacity = '0';
-      peakGroup.style.opacity = '0';
+      const hideList = ['leftEyeGroup','rightEyeGroup','leftPupilGroup','rightPupilGroup',
+        'leftHornGroup','rightHornGroup','leftCheekGroup','rightCheekGroup','peakGroup'];
+      hideList.forEach(id => { const el = document.getElementById(id); if (el) { el.style.opacity = '0'; } });
       document.getElementById('face').style.opacity = '0';
       document.getElementById('chin').style.opacity = '0';
 
-      // Phase 2 (after 400ms): eyes appear + blink
+      // Phase 2 (500ms): eyes appear
       setTimeout(() => {
-        leftEyeGroup.style.transition = 'opacity .6s ease, transform .12s ease';
-        rightEyeGroup.style.transition = 'opacity .6s ease, transform .12s ease';
-        leftPupilGroup.style.transition = 'opacity .6s ease, transform .12s ease';
-        rightPupilGroup.style.transition = 'opacity .6s ease, transform .12s ease';
-        leftEyeGroup.style.opacity = '1';
-        rightEyeGroup.style.opacity = '1';
-        leftPupilGroup.style.opacity = '1';
-        rightPupilGroup.style.opacity = '1';
+        ['leftEyeGroup','rightEyeGroup','leftPupilGroup','rightPupilGroup'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) { el.style.transition = 'opacity .6s ease, transform .12s ease'; el.style.opacity = '1'; }
+        });
 
         // Blink after eyes appear
         setTimeout(() => {
           triggerBlink();
-          // Phase 3 (after blink): horns fade in
+
+          // Phase 3 (600ms after blink): horns fade in
           setTimeout(() => {
-            leftHornGroup.style.transition = 'opacity .8s ease';
-            rightHornGroup.style.transition = 'opacity .8s ease';
-            leftHornGroup.style.opacity = '1';
-            rightHornGroup.style.opacity = '1';
+            ['leftHornGroup','rightHornGroup'].forEach(id => {
+              const el = document.getElementById(id);
+              if (el) { el.style.transition = 'opacity .7s ease'; el.style.opacity = '1'; }
+            });
 
-            // Phase 4: face, cheeks, chin, peak fade in together
+            // Phase 4 (900ms): face, cheeks, chin, peak fade in
             setTimeout(() => {
-              const fadeParts = [document.getElementById('face'), document.getElementById('chin'),
-                                leftCheekGroup, rightCheekGroup, peakGroup];
-              fadeParts.forEach(el => { if (el) { el.style.transition = 'opacity 1s ease'; el.style.opacity = '1'; } });
-              owlGroup.style.transition = 'opacity 1.2s ease';
-              owlGroup.style.opacity = state.transparency;
+              [document.getElementById('face'), document.getElementById('chin'),
+               leftCheekGroup, rightCheekGroup, peakGroup].forEach(el => {
+                if (el) { el.style.transition = 'opacity .9s ease'; el.style.opacity = '1'; }
+              });
+              owlGroup.style.transition = 'opacity 1s ease';
+              owlGroup.style.opacity = state.version === 'ephemeral' ? 0.55 * state.transparency : state.transparency;
 
-              // Phase 5: settled
+              // Phase 5 (1.2s later): settled → auto-switch to fluid
               setTimeout(() => {
-                // Clean up inline opacities (rely on CSS/controls now)
+                // Clean all inline opacities
                 [leftEyeGroup, rightEyeGroup, leftPupilGroup, rightPupilGroup,
                  leftHornGroup, rightHornGroup, leftCheekGroup, rightCheekGroup,
                  peakGroup, document.getElementById('face'), document.getElementById('chin')].forEach(el => {
                   if (el) { el.style.transition = ''; el.style.opacity = ''; }
                 });
                 owlGroup.style.transition = '';
-                owlGroup.style.opacity = state.transparency;
+                owlGroup.style.opacity = state.version === 'ephemeral' ? 0.55 * state.transparency : state.transparency;
                 orderAnimActive = false;
+
+                // Auto-switch to fluid mode
+                state.mode = 'fluid';
+                document.querySelectorAll('[data-mode]').forEach(b => {
+                  b.classList.toggle('btn-active', b.dataset.mode === 'fluid');
+                });
+                fluidOverlay.removeAttribute('display');
+                applyFieldColor();
+                modeDesc.textContent = 'Organic fluid distortion inside the owl head — turbulence evolves continuously, color shifts with field state. LINK stays in default colors.';
               }, 1200);
-            }, 800);
-          }, 500);
+            }, 900);
+          }, 600);
         }, 700);
-      }, 400);
+      }, 500);
     }, 200);
+  }
+
+  // ── Order Leaving (reverse sequence) ──
+  function startOrderLeaving() {
+    if (orderAnimActive) { clearTimeout(orderAnimTimer); orderAnimTimer = null; }
+    orderAnimActive = true;
+    fluidOverlay.setAttribute('display', 'none');
+
+    // Phase 1: face fades
+    [document.getElementById('face'), document.getElementById('chin'),
+     leftCheekGroup, rightCheekGroup].forEach(el => {
+      if (el) { el.style.transition = 'opacity .5s ease'; el.style.opacity = '0'; }
+    });
+
+    setTimeout(() => {
+      // Phase 2: blink
+      triggerBlink();
+
+      setTimeout(() => {
+        // Phase 3: horns fade
+        ['leftHornGroup','rightHornGroup','peakGroup'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) { el.style.transition = 'opacity .4s ease'; el.style.opacity = '0'; }
+        });
+
+        setTimeout(() => {
+          // Phase 4: blink again
+          triggerBlink();
+
+          setTimeout(() => {
+            // Phase 5: eyes fade
+            ['leftEyeGroup','rightEyeGroup','leftPupilGroup','rightPupilGroup'].forEach(id => {
+              const el = document.getElementById(id);
+              if (el) { el.style.transition = 'opacity .5s ease'; el.style.opacity = '0'; }
+            });
+
+            setTimeout(() => {
+              // Clean up — show field only state
+              [leftEyeGroup, rightEyeGroup, leftPupilGroup, rightPupilGroup,
+               leftHornGroup, rightHornGroup, leftCheekGroup, rightCheekGroup,
+               peakGroup, document.getElementById('face'), document.getElementById('chin')].forEach(el => {
+                if (el) { el.style.transition = ''; el.style.opacity = ''; }
+              });
+              owlGroup.style.display = 'none';
+              owlGroup.style.transition = '';
+              orderAnimActive = false;
+
+              // Return to field mode
+              state.mode = 'field';
+              document.querySelectorAll('[data-mode]').forEach(b => {
+                b.classList.toggle('btn-active', b.dataset.mode === 'field');
+              });
+              owlGroup.style.display = '';
+              owlGroup.style.opacity = state.version === 'ephemeral' ? 0.55 * state.transparency : state.transparency;
+              modeDesc.textContent = 'Crisp owl core + 3 field rings breathing outside, cyan glow, particles orbiting.';
+            }, 500);
+          }, 300);
+        }, 500);
+      }, 300);
+    }, 600);
   }
 
   // ── Apply version ──
@@ -659,45 +747,56 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
     document.getElementById('rightPupil').setAttribute('rx', '21.408592');
     document.getElementById('leftPupil').setAttribute('ry', '19.028851');
     document.getElementById('rightPupil').setAttribute('ry', '20.116211');
+    // Restore chin position
+    if (document.getElementById('chin')) document.getElementById('chin').style.transform = '';
 
     switch (e) {
       case 'neutral': break;
       case 'sleepy':
-        // Eyes droop (scaleY from center) + pupils shrink & drop
-        leftEyeGroup.style.transform = 'scaleY(0.35)';
-        rightEyeGroup.style.transform = 'scaleY(0.35)';
-        leftPupilGroup.style.transform = 'translateY(6px) scale(0.55)';
-        rightPupilGroup.style.transform = 'translateY(6px) scale(0.55)';
+        // Horns + peak push down like brows forcing eyes closed
+        leftHornGroup.style.transform = 'translateY(8px)';
+        rightHornGroup.style.transform = 'translateY(8px)';
+        peakGroup.style.transform = 'translateY(6px)';
+        // Eyes droop + pupils shrink & drop far
+        leftEyeGroup.style.transform = 'scaleY(0.25)';
+        rightEyeGroup.style.transform = 'scaleY(0.25)';
+        leftPupilGroup.style.transform = 'translateY(2px) scale(0.35)';
+        rightPupilGroup.style.transform = 'translateY(2px) scale(0.35)';
         break;
       case 'alert':
-        leftEyeGroup.style.transform = 'scaleY(1.2)';
-        rightEyeGroup.style.transform = 'scaleY(1.2)';
-        leftHornGroup.style.transform = 'translateY(-7px)';
-        rightHornGroup.style.transform = 'translateY(-7px)';
+        leftEyeGroup.style.transform = 'scaleY(1.25)';
+        rightEyeGroup.style.transform = 'scaleY(1.25)';
+        leftHornGroup.style.transform = 'translateY(-12px)';
+        rightHornGroup.style.transform = 'translateY(-12px)';
+        peakGroup.style.transform = 'translateY(-4px)';
         break;
       case 'curious':
-        owlGroup.style.transform = 'rotate(5deg)';
-        leftHornGroup.style.transform = 'translateY(-5px)';
+        owlGroup.style.transform = 'rotate(7deg)';
+        leftHornGroup.style.transform = 'translateY(-8px)';
+        rightHornGroup.style.transform = 'translateY(3px)';
         break;
       case 'blocked':
-        // Squint + guarded posture — pupils contract
-        leftEyeGroup.style.transform = 'scaleY(0.55)';
-        rightEyeGroup.style.transform = 'scaleY(0.55)';
-        document.getElementById('leftPupil').setAttribute('rx', '13');
-        document.getElementById('rightPupil').setAttribute('rx', '12');
-        document.getElementById('leftPupil').setAttribute('ry', '11');
-        document.getElementById('rightPupil').setAttribute('ry', '11');
-        peakGroup.style.transform = 'translateY(3px)';
+        // Squint + guarded — pupils contract hard
+        leftEyeGroup.style.transform = 'scaleY(0.45)';
+        rightEyeGroup.style.transform = 'scaleY(0.45)';
+        document.getElementById('leftPupil').setAttribute('rx', '10');
+        document.getElementById('rightPupil').setAttribute('rx', '9');
+        document.getElementById('leftPupil').setAttribute('ry', '9');
+        document.getElementById('rightPupil').setAttribute('ry', '9');
+        leftHornGroup.style.transform = 'translateY(3px)';
+        rightHornGroup.style.transform = 'translateY(3px)';
+        peakGroup.style.transform = 'translateY(5px)';
         break;
       case 'complete':
-        // Horns up + cheeks lift = symbolic smile
-        leftHornGroup.style.transform = 'translateY(-6px)';
-        rightHornGroup.style.transform = 'translateY(-6px)';
-        leftCheekGroup.style.transform = 'translateY(-4px)';
-        rightCheekGroup.style.transform = 'translateY(-4px)';
-        // Soft eye squint
-        leftEyeGroup.style.transform = 'scaleY(0.88)';
-        rightEyeGroup.style.transform = 'scaleY(0.88)';
+        // Expansive: horns + peak lift, cheeks widen + raise, chin lifts
+        leftHornGroup.style.transform = 'translateY(-10px)';
+        rightHornGroup.style.transform = 'translateY(-10px)';
+        peakGroup.style.transform = 'translateY(-6px)';
+        leftCheekGroup.style.transform = 'translate(-6px, -8px) scale(1.12)';
+        rightCheekGroup.style.transform = 'translate(6px, -8px) scale(1.12)';
+        document.getElementById('chin').style.transform = 'translateY(-6px)';
+        leftEyeGroup.style.transform = 'scaleY(0.85)';
+        rightEyeGroup.style.transform = 'scaleY(0.85)';
         break;
     }
 
@@ -715,8 +814,8 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
       if (eye) eye.style.transform = 'scaleY(0.05)';
       if (pupil) pupil.style.transform = 'scaleY(0.05)';
       setTimeout(() => {
-        if (eye) eye.style.transform = '';
-        if (pupil) pupil.style.transform = '';
+        // Re-apply current expression instead of resetting to neutral
+        applyEmotion();
       }, 140);
     });
   }
@@ -727,8 +826,7 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
     if (eye) eye.style.transform = 'scaleY(0.05)';
     if (pupil) pupil.style.transform = 'scaleY(0.05)';
     setTimeout(() => {
-      if (eye) eye.style.transform = '';
-      if (pupil) pupil.style.transform = '';
+      applyEmotion();
     }, 220);
   }
 
@@ -972,6 +1070,31 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
 
   document.querySelector('[data-action="flyIn"]').addEventListener('click', flyIn);
   document.querySelector('[data-action="flyOut"]').addEventListener('click', flyOut);
+
+  document.querySelector('[data-action="appear"]').addEventListener('click', function() {
+    if (orderAnimActive) { clearTimeout(orderAnimTimer); orderAnimTimer = null; orderAnimActive = false; }
+    // Reset all inline styles first
+    [leftEyeGroup, rightEyeGroup, leftPupilGroup, rightPupilGroup,
+     leftHornGroup, rightHornGroup, leftCheekGroup, rightCheekGroup,
+     peakGroup, document.getElementById('face'), document.getElementById('chin')].forEach(el => {
+      if (el) { el.style.transition = ''; el.style.opacity = ''; el.style.transform = ''; }
+    });
+    owlGroup.style.display = '';
+    owlGroup.style.transition = '';
+    energyField.style.display = '';
+    energyField.style.filter = 'none';
+    fluidOverlay.setAttribute('display', 'none');
+    state.mode = 'order';
+    document.querySelectorAll('[data-mode]').forEach(b => {
+      b.classList.toggle('btn-active', b.dataset.mode === 'order');
+    });
+    startOrderEmerging();
+  });
+
+  document.querySelector('[data-action="leave"]').addEventListener('click', function() {
+    if (orderAnimActive) { clearTimeout(orderAnimTimer); orderAnimTimer = null; orderAnimActive = false; }
+    startOrderLeaving();
+  });
 
   document.getElementById('glowCheck').addEventListener('change', function() {
     state.glowOn = this.checked;
