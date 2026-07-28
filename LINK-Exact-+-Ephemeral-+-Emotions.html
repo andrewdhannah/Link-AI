@@ -852,11 +852,12 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
       const eye = document.getElementById(s + 'EyeGroup');
       const pupil = document.getElementById(s + 'PupilGroup');
       const horn = document.getElementById(s + 'HornGroup');
+      const cheek = document.getElementById(s + 'CheekGroup');
       if (eye) eye.style.transform = 'scaleY(0.05)';
       if (pupil) pupil.style.transform = 'scaleY(0.05)';
       if (horn) horn.style.transform = 'translateY(3px)';
+      if (cheek) cheek.style.transform = 'translateY(2px)';
       setTimeout(() => {
-        // Re-apply current expression instead of resetting to neutral
         applyEmotion();
       }, 140);
     });
@@ -866,9 +867,11 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
     const eye = document.getElementById(side + 'EyeGroup');
     const pupil = document.getElementById(side + 'PupilGroup');
     const horn = document.getElementById(side + 'HornGroup');
+    const cheek = document.getElementById(side + 'CheekGroup');
     if (eye) eye.style.transform = 'scaleY(0.05)';
     if (pupil) pupil.style.transform = 'scaleY(0.05)';
-    if (horn) horn.style.transform = 'translateY(4px)';
+    if (horn) horn.style.transform = 'translateY(5px)';
+    if (cheek) cheek.style.transform = 'translateY(3px)';
     setTimeout(() => {
       applyEmotion();
     }, 220);
