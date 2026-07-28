@@ -167,11 +167,6 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
           <g id="particles" fill="#00E5FF"/>
         </g>
 
-          <!-- Fluid overlay (visible only in fluid mode, clipped to face area) -->
-        <g id="fluidOverlay" display="none" clip-path="url(#brainClip)">
-          <rect width="400" height="400" fill="url(#fluidGrad)" filter="url(#fluidFilter)" opacity="0.55"/>
-        </g>
-
         <!-- LINK root group — wraps owl + fluid so transforms (fly, tilt) move both -->
         <g id="linkRoot">
 
@@ -407,7 +402,7 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
   const linkRoot = document.getElementById('linkRoot');
   const energyField = document.getElementById('energyField');
   const particles = document.getElementById('particles');
-  const fluidOverlay = document.getElementById('fluidOverlay');
+  let fluidOverlay = null;
   const fluidTurb = document.getElementById('fluidTurb');
   const glowBlur = document.getElementById('glowSolidBlur');
   const glowFlood = document.getElementById('glowSolidFlood');
@@ -972,6 +967,21 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
 
   // ── Init ──
   function init() {
+    // Create fluid overlay in JS (avoids SVG parser hoisting clip-path out of linkRoot)
+    const fo = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    fo.setAttribute('id', 'fluidOverlay');
+    fo.setAttribute('display', 'none');
+    fo.setAttribute('clip-path', 'url(#brainClip)');
+    const foRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    foRect.setAttribute('width', '400');
+    foRect.setAttribute('height', '400');
+    foRect.setAttribute('fill', 'url(#fluidGrad)');
+    foRect.setAttribute('filter', 'url(#fluidFilter)');
+    foRect.setAttribute('opacity', '0.55');
+    fo.appendChild(foRect);
+    linkRoot.insertBefore(fo, linkRoot.firstChild);
+    fluidOverlay = fo;
+
     applyFieldColor(FIELD_COLORS.idle);
     applyMode();
     applyVersion();
