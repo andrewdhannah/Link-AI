@@ -4,7 +4,8 @@
 **Date:** 2026-07-28
 **Revision:** 2 — Three-plane model, collaboration states, event-driven choreography
 **Source:** LINK.svg (canonical geometry), LINK-Exact-+-Ephemeral-+-Emotions.html (POC)
-**Validation:** Verified against rendered output — invariant checks pass in current implementation.
+**Constitutional Dependency:** Implements I-4 (expression ≠ meaning) and I-8 (identity is canonical) from `LIBRARIAN-RUNTIME-CONSTITUTION-001`.
+**Does not define:** Runtime authority, work semantics, capability qualification, or evidence rules.
 
 ---
 
