@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="400"
+   height="400"
+   viewBox="0 0 400 400"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.4 (dcaf3e7d, 2026-05-05)"
+   sodipodi:docname="LINK.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#111111"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     inkscape:zoom="0.89887065"
+     inkscape:cx="381.03369"
+     inkscape:cy="370.46487"
+     inkscape:window-width="1671"
+     inkscape:window-height="1225"
+     inkscape:window-x="775"
+     inkscape:window-y="144"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <ellipse
+       style="fill:#164450;stroke-width:0.994949"
+       id="face"
+       cx="207.81244"
+       cy="207.07414"
+       rx="174.08565"
+       ry="120.15359"
+       inkscape:label="face" />
+    <ellipse
+       style="fill:#164450;fill-opacity:1;stroke-width:0.994949"
+       id="right-cheek"
+       cx="330.18011"
+       cy="235.67995"
+       rx="58.59193"
+       ry="60.892315"
+       inkscape:label="right-cheek" />
+    <ellipse
+       style="fill:#164450;fill-opacity:1;stroke-width:0.994949"
+       id="left-cheek"
+       cx="82.177795"
+       cy="233.71455"
+       rx="58.59193"
+       ry="60.892315"
+       inkscape:label="left-cheek" />
+    <path
+       style="fill:#164450;stroke-width:0.994949"
+       d="m 157.67124,317.44149 c 52.95809,59.80496 48.45102,40.23242 48.45102,40.23242 0,0 -50.70456,44.5819 0,0 50.70457,-44.58188 36.05657,-41.31978 36.05657,-41.31978 z"
+       id="chin"
+       inkscape:label="chin" />
+    <ellipse
+       style="fill:#53676c;stroke-width:0.732802"
+       id="right-eye"
+       cx="270.83963"
+       cy="208.43449"
+       rx="60.84547"
+       ry="59.804955"
+       inkscape:label="right-eye" />
+    <ellipse
+       style="fill:#dbe2e3;stroke-width:0.616671"
+       id="right-pupil"
+       cx="270.70145"
+       cy="217.88528"
+       rx="21.408592"
+       ry="20.116211"
+       inkscape:label="right-pupil" />
+    <ellipse
+       style="fill:#53676c;stroke-width:0.732802"
+       id="left-eye"
+       cx="140.76973"
+       cy="204.35574"
+       rx="60.84547"
+       ry="59.804955"
+       inkscape:label="left-eye" />
+    <ellipse
+       style="fill:#dbe2e3;stroke-width:0.615356"
+       id="left-pupil"
+       cx="143.02325"
+       cy="214.6857"
+       rx="22.53536"
+       ry="19.028851"
+       inkscape:label="left-pupil" />
+    <path
+       style="fill:#0b2228;stroke-width:0.994949"
+       d="M 129.50204,84.745849 C 57.388899,33.639798 21.332323,35.814523 21.332323,35.814523 l 4.50707,53.280776 c 0,0 -10.14091,15.223081 15.77475,29.358801 25.915666,14.13571 176.902567,40.23242 163.381357,36.97033 -13.52122,-3.26209 -75.49346,-70.678581 -75.49346,-70.678581 z"
+       id="left-horn"
+       inkscape:label="left-horn" />
+    <path
+       style="fill:#0b2228;stroke-width:0.920741"
+       d="m 275.41158,83.206889 c 61.75705,-51.106048 92.63558,-48.931323 92.63558,-48.931323 l -3.85983,53.280773 c 0,0 8.68461,15.223081 -13.50935,29.358801 -22.19395,14.13571 -151.49776,40.23242 -139.91832,36.97033 11.57945,-3.26209 64.65192,-70.678581 64.65192,-70.678581 z"
+       id="right-horn"
+       inkscape:label="right-horn" />
+    <path
+       style="fill:#0b2228;stroke-width:1.0961"
+       d="m 120.48791,84.897029 c 86.76112,-18.475549 162.25458,5.27873 162.25458,5.27873 L 199.36165,226.10302 Z"
+       id="widows-peak"
+       inkscape:label="Peak" />
+      </g>
+</svg>
