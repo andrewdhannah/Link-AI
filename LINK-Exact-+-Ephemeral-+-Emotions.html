@@ -502,9 +502,9 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
 
     // Brain autonomous movement — slow, gentle drift timed to blink rhythm (~3-5s cycles)
     if (state.mode === 'fluid') {
-      brainTremorPhase += 0.006;
-      const driftX = Math.sin(brainTremorPhase * 0.25) * 4;
-      const driftY = Math.cos(brainTremorPhase * 0.35) * 3;
+      brainTremorPhase += 0.003;
+      const driftX = Math.sin(brainTremorPhase * 0.2) * 5;
+      const driftY = Math.cos(brainTremorPhase * 0.28) * 4;
       const tremorX = Math.sin(brainTremorPhase * 4.5) * 0.6;
       const tremorY = Math.cos(brainTremorPhase * 5.0) * 0.5;
       const driftRotate = Math.sin(brainTremorPhase * 0.2) * 1.5;
