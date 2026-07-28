@@ -42,6 +42,10 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
 
 .canvas-footer{display:flex;align-items:center;justify-content:space-between;margin-top:12px;font-size:11px;color:#71717a;font-family:'JetBrains Mono',monospace}
 
+/* SVG animation origins */
+.eye-group{transform-origin:var(--eye-cx) var(--eye-cy);transition:transform .12s ease}
+.pupil-group{transform-origin:var(--pupil-cx) var(--pupil-cy);transition:transform .12s ease}
+
 /* Mobile quick buttons */
 .mobile-actions{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;width:100%;max-width:400px}
 @media(min-width:1024px){.mobile-actions{display:none}}
@@ -230,19 +234,19 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
             </g>
 
             <!-- Right eye -->
-            <g id="rightEyeGroup">
+            <g id="rightEyeGroup" class="eye-group" style="--eye-cx:270.84px;--eye-cy:208.43px">
               <ellipse id="rightEye" cx="270.83963" cy="208.43449" rx="60.84547" ry="59.804955" fill="#53676c" stroke="none"/>
             </g>
             <!-- Right pupil -->
-            <g id="rightPupilGroup">
+            <g id="rightPupilGroup" class="pupil-group" style="--pupil-cx:270.7px;--pupil-cy:217.89px">
               <ellipse id="rightPupil" cx="270.70145" cy="217.88528" rx="21.408592" ry="20.116211" fill="#dbe2e3" stroke="none"/>
             </g>
             <!-- Left eye -->
-            <g id="leftEyeGroup">
+            <g id="leftEyeGroup" class="eye-group" style="--eye-cx:140.77px;--eye-cy:204.36px">
               <ellipse id="leftEye" cx="140.76973" cy="204.35574" rx="60.84547" ry="59.804955" fill="#53676c" stroke="none"/>
             </g>
             <!-- Left pupil -->
-            <g id="leftPupilGroup">
+            <g id="leftPupilGroup" class="pupil-group" style="--pupil-cx:143.02px;--pupil-cy:214.69px">
               <ellipse id="leftPupil" cx="143.02325" cy="214.6857" rx="22.53536" ry="19.028851" fill="#dbe2e3" stroke="none"/>
             </g>
 
@@ -669,28 +673,27 @@ html,body{height:100%;background:#0a0e12;color:#e4e4e7;font-family:'Inter',syste
 
   // ---- Emotion triggers (temporary) ----
   function triggerBlink() {
-    ['leftEyeGroup','rightEyeGroup'].forEach(id => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.style.transition = 'transform 0.1s';
-      el.style.transform = 'scaleY(0.05)';
+    ['left','right'].forEach(side => {
+      const eye = document.getElementById(side + 'EyeGroup');
+      const pupil = document.getElementById(side + 'PupilGroup');
+      if (eye) eye.style.transform = 'scaleY(0.05)';
+      if (pupil) pupil.style.transform = 'scaleY(0.05)';
       setTimeout(() => {
-        el.style.transition = 'transform 0.15s';
-        el.style.transform = '';
-      }, 120);
+        if (eye) eye.style.transform = '';
+        if (pupil) pupil.style.transform = '';
+      }, 140);
     });
   }
 
   function triggerWink(side) {
-    const id = side === 'left' ? 'leftEyeGroup' : 'rightEyeGroup';
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.style.transition = 'transform 0.1s';
-    el.style.transform = 'scaleY(0.05)';
+    const eye = document.getElementById(side + 'EyeGroup');
+    const pupil = document.getElementById(side + 'PupilGroup');
+    if (eye) eye.style.transform = 'scaleY(0.05)';
+    if (pupil) pupil.style.transform = 'scaleY(0.05)';
     setTimeout(() => {
-      el.style.transition = 'transform 0.15s';
-      el.style.transform = '';
-    }, 200);
+      if (eye) eye.style.transform = '';
+      if (pupil) pupil.style.transform = '';
+    }, 220);
   }
 
   // ---- Stats ----
