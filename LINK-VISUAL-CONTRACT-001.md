@@ -561,3 +561,117 @@ A LINK implementation is compliant if the following assertions pass:
 
 - [ ] Fluid brain is active only during appropriate events (§13 restriction table)
 - [ ] Fluid brain is not the default thinking/processing animation
+
+---
+
+## 16. Reference Harness Requirement
+
+The reference implementation (`LINK-Exact-+-Ephemeral-+-Emotions.html`) serves
+two roles:
+
+| Role | Function |
+|------|----------|
+| **Reference implementation** | Demonstrates the intended visual behavior for each contract state |
+| **Fixture debugger** | Allows a human to exercise fixture inputs and inspect runtime values against contract bounds |
+
+### Control-to-Fixture Mapping
+
+Every interactive control in the POC maps to a fixture input:
+
+| Control | Fixture Domain | Fixture |
+|---------|---------------|---------|
+| State buttons (Idle, Listening, etc.) | Presence mapping | PRESENCE-MAPPING-001 |
+| Expression buttons (Neutral, Sleepy, etc.) | Context modulation | CONTEXT-MODULATION-001 |
+| Blink / Wink triggers | Identity invariants | IDENTITY-INVARIANT-002 |
+| Version toggle (Solid / Ephemeral) | Render mode | RENDER-MODE-SOLID-001, RENDER-MODE-EPHEMERAL-001 |
+| Mode buttons (Field / Fluid / Order) | Render mode + Order Emerging | RENDER-MODE-FLUID-BRAIN-001, ORDER-EMERGING-001 |
+| Fly slider + Appear/Leave | Invocation + Order Emerging | ORDER-EMERGING-001 through 004 |
+| Glow slider | Presence field | PRESENCE-MAPPING-001 (intensity bounds) |
+| Wireframe toggle | Forbidden expressions | FORBIDDEN-001 (topology guard) |
+| Transparency slider | Render mode | RENDER-MODE-EPHEMERAL-001 (opacity bounds) |
+
+### Harness Constraint
+
+The harness injects states. It does not own them.
+
+The HTML simulates:
+
+```javascript
+LinkAvatar.setState({ state: "blocked" })
+```
+
+but must not become:
+
+```javascript
+if (buttonPressed) { invent blocked semantics }
+```
+
+The POC exposes each fixture dimension through its controls so a reviewer
+can manually validate contract compliance without standing up an automated
+test framework. This is particularly valuable for:
+
+- Visual debugging of renderer behavior
+- Contract review during implementations
+- Side-by-side renderer comparison
+- Regression investigation
+
+---
+
+## 17. Artifact Chain
+
+LINK now follows the same lifecycle discipline as other platform components:
+
+```
+Explore (blob experiments)
+   |
+   v
+Discover invariant (identity must be fixed)
+   |
+   v
+Write contract (constraints, state vocabulary, modulation rules)
+   |
+   v
+Build fixture suite (21 assertions across 7 domains)
+   |
+   v
+Implement (reference renderer)
+   |
+   v
+Validate (manual harness + future automated)
+```
+
+### Complete Artifact Chain
+
+```
+LINK.svg
+(Canonical Identity — source geometry)
+        |
+        v
+LINK-VISUAL-CONTRACT-001.md
+(Constraints — this document)
+        |
+        v
+LINK-EXPRESSION-FIXTURE-SUITE-001.md
+(Assertions — pixel-independent contract checks)
+        |
+        v
+LINK-Exact-+-Ephemeral-+-Emotions.html
+(Reference Renderer + Manual Validation Harness)
+```
+
+Each artifact has a single dependency. The chain is acyclic.
+
+### Preserved Search History
+
+The earlier exploratory artifacts remain in the repository. They are
+not discarded work — they document why the contract exists:
+
+| Artifact | Outcome | Lesson |
+|----------|---------|--------|
+| Amorphous blob identity experiments | Replaced | Unconstrained deformation caused identity substitution |
+| Animated fluid without geometry anchors | Replaced | Brain defaulted to mammal/mascot — no owl recognition |
+| React-based prototypes | Superseded | Framework dependency unnecessary; plain HTML/CSS/JS suffices |
+| Meta-generated SVG (regenerated paths) | Replaced | Generated paths lost the relational geometry — face primitive relationships broke |
+
+Without this history, a future contributor might ask "why not just make the
+owl more fluid?" The answer is preserved in the failure trail.
